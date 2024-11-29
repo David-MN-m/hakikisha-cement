@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verified Cement Vendors</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .vendor-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: transform 0.2s;
+            margin-bottom: 20px;
+        }
+        .vendor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .verified-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .rating {
+            color: #ffc107;
+        }
+        .order-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .order-btn:hover {
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Cement Shop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="vendors.html">Vendors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="orders.html">Orders</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="text-center mb-5">Verified Cement Vendors</h1>
+        
+        <div class="row">
+            <!-- Vendor 1 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Premium Cement Co.</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★★ <span class="text-muted">(4.8/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Nairobi Central</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 750/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=1" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 2 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>BuildRight Cement</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★☆ <span class="text-muted">(4.2/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Westlands</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 730/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=2" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 3 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Quality Cement Ltd</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★★ <span class="text-muted">(4.6/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Karen</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 745/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=3" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 4 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Reliable Cement Supplies</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★☆ <span class="text-muted">(4.3/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Kilimani</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 735/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=4" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 5 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>MasterBuild Cement</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★★ <span class="text-muted">(4.7/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Lavington</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 755/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=5" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 6 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>CementPro Kenya</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★☆ <span class="text-muted">(4.4/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Parklands</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 740/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=6" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 7 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>BuildTech Solutions</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★☆ <span class="text-muted">(4.1/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> South B</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 725/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=7" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 8 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Construction Kings</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★★ <span class="text-muted">(4.9/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Kileleshwa</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 760/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=8" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 9 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Elite Cement Traders</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★☆ <span class="text-muted">(4.5/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Ngara</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 728/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=9" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 10 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Cement Express Ltd</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★☆ <span class="text-muted">(4.3/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Eastleigh</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 732/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=10" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 11 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>FastBuild Cement</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★★ <span class="text-muted">(4.7/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Langata</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 748/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=11" class="order-btn">Order Now</a>
+                </div>
+            </div>
+
+            <!-- Vendor 12 -->
+            <div class="col-md-4">
+                <div class="vendor-card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Supreme Cement Kenya</h4>
+                        <span class="verified-badge">Verified</span>
+                    </div>
+                    <div class="rating mb-2">
+                        ★★★★★ <span class="text-muted">(4.8/5)</span>
+                    </div>
+                    <p class="mb-2"><strong>Location:</strong> Upperhill</p>
+                    <p class="mb-2"><strong>Price:</strong> KES 752/bag</p>
+                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
+                    <a href="orders.html?vendor=12" class="order-btn">Order Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

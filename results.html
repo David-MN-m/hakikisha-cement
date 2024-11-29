@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--
+    This is the head section of the HTML document. It contains metadata and
+    CSS styles for the page. The metadata includes the character encoding,
+    viewport settings, and the page title. The CSS styles define the layout
+    and visual appearance of the page, including the colors, fonts, and
+    padding/margin settings.
+
+    The styles for the navigation bar, main content area, and calculator
+    container are defined here. The styles for the verification form elements
+    are also defined here.
+
+    The media query for mobile devices is also defined here, which hides the
+    navigation links and reduces the padding on the main content area.
+  -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Results - Hakikisha Verifier</title>
+    <style>
+        :root {
+            --primary-color: #0070f3;
+            --secondary-color: #0366d6;
+            --background-color: #f5f5f5;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+        }
+
+        .nav-container {
+            background: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .calculator-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .calculate-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .results-display {
+            margin-top: 2rem;
+            padding: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .results-display.show {
+            display: block;
+        }
+
+        .result-item {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background-color: var(--background-color);
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+        }
+
+        /* New styles for verification form elements */
+        .checkbox-group {
+            margin: 10px 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="number"],
+        .input-group input[type="date"] {
+            margin-bottom: 10px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: white;
+            margin-bottom: 10px;
+        }
+
+        .form-select:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .input-group label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        #specificLocation {
+            margin-top: 10px;
+            width: 100%;
+        }
+ /* Storage Slider Styles */
+ .storage-slider-container {
+     margin: 15px 0;
+     padding: 10px;
+     background: #f5f5f5;
+     border-radius: 8px;
+ }
+ 
+ input[type="range"] {
+     width: 100%;
+     height: 8px;
+     background: linear-gradient(to right, #ff4d4f, #faad14, #52c41a);
+     border-radius: 4px;
+     outline: none;
+     -webkit-appearance: none;
+ }
+ 
+ input[type="range"]::-webkit-slider-thumb {
+     -webkit-appearance: none;
+     width: 20px;
+     height: 20px;
+     background: white;
+     border: 2px solid #1890ff;
+     border-radius: 50%;
+     cursor: pointer;
+     transition: all 0.3s;
+ }
+ 
+ input[type="range"]::-webkit-slider-thumb:hover {
+     background: #1890ff;
+ }
+ 
+ .slider-labels {
+     display: flex;
+     justify-content: space-between;
+     margin-top: 8px;
+     color: #666;
+     font-size: 0.9em;
+ }
+ 
+ .storage-description {
+     margin-top: 10px;
+     padding: 8px;
+     border-radius: 4px;
+     text-align: center;
+     font-weight: 500;
+     transition: all 0.3s;
+ }       
+    </style>
+    
+</head>
+<body>
+    <div class="nav-container">
+        <nav>
+            <div class="logo">
+                <h1>Hakikisha Verifier</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Verify.html">Verify</a></li>
+                <li><a href="results.html" class="active">Results</a></li>
+                <li><a href="vendors.html">Cement Vendors</a></li>
+                <li><a href="orders.html">Order Cement</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <div class="calculator-container">
+            <h2>Cement Verification Calculator</h2>
+<form id="verificationForm">
+    <!-- Brand Verification Section -->
+    <div class="input-group">
+        <label for="manufacturerSelect">Select Manufacturer:</label>
+        <select id="manufacturerSelect" class="form-select" required>
+            <option value="">Choose a manufacturer...</option>
+            <option value="bamburi">Bamburi Cement Limited</option>
+            <option value="mombasa">Mombasa Cement Limited</option>
+            <option value="eapc">East African Portland Cement Company</option>
+            <option value="national">National Cement Company Limited</option>
+            <option value="savannah">Savannah Cement Limited</option>
+            <option value="rai">Rai Cement Limited</option>
+            <option value="karsan">Karsan Ramji & Sons Ltd</option>
+        </select>
+
+        <label for="brandSelect">Select Brand:</label>
+        <select id="brandSelect" class="form-select" required disabled>
+            <option value="">First select a manufacturer...</option>
+        </select>
+    </div>
+
+    <!-- Location Verification Section -->
+    <div class="input-group">
+        <label for="locationInput">Location Details:</label>
+        <select id="countySelect" class="form-select" required>
+            <option value="">Select County...</option>
+            <option value="nairobi">Nairobi</option>
+            <option value="mombasa">Mombasa</option>
+            <option value="kisumu">Kisumu</option>
+            <option value="nakuru">Nakuru</option>
+            <option value="uasin-gishu">Uasin Gishu</option>
+            <!-- Add more counties as needed -->
+        </select>
+        <input type="text" id="specificLocation" placeholder="Enter specific location/town" required>
+        <label>Distribution Path:</label>
+        <div class="checkbox-group">
+            <input type="checkbox" id="directFactory"> <label for="directFactory">Direct from Factory</label>
+            <input type="checkbox" id="authorizedDealer"> <label for="authorizedDealer">Authorized Dealer</label>
+            <input type="checkbox" id="retailer"> <label for="retailer">Retailer</label>
+        </div>
+    </div>
+
+    <!-- Weight Verification Section -->
+    <div class="input-group">
+        <label>Weight Verification:</label>
+        <input type="number" id="actualWeight" placeholder="Enter actual weight (kg)" step="0.1" required>
+        <select id="weightTolerance" class="form-select" required>
+            <option value="">Select weight tolerance...</option>
+            <option value="within">Within ±0.5kg of 50kg</option>
+            <option value="slight">±0.5kg to ±1kg deviation</option>
+            <option value="significant">More than ±1kg deviation</option>
+        </select>
+    </div>
+
+    <!-- Strength Verification Section -->
+    <div class="input-group">
+        <label>Strength Class:</label>
+        <select id="strengthClass" class="form-select" required>
+            <option value="">Select strength class...</option>
+            <option value="32.5">32.5 (Residential)</option>
+            <option value="42.5">42.5 (Commercial)</option>
+            <option value="52.5">52.5 (Heavy Infrastructure)</option>
+        </select>
+        <label>Intended Use:</label>
+        <select id="intendedUse" class="form-select" required>
+            <option value="">Select intended use...</option>
+            <option value="residential">Residential Construction</option>
+            <option value="commercial">Commercial Building</option>
+            <option value="infrastructure">Infrastructure Project</option>
+        </select>
+    </div>
+
+    <!-- KEBS Verification Section -->
+    <div class="input-group">
+        <label>KEBS Verification:</label>
+        <input type="text" id="kebsSticker" placeholder="Enter KEBS sticker code" required>
+        <input type="text" id="batchNumber" placeholder="Enter batch number" required>
+        <div class="checkbox-group">
+            <input type="checkbox" id="stickerPresent"> <label for="stickerPresent">KEBS Sticker Present</label>
+            <input type="checkbox" id="stickerIntact"> <label for="stickerIntact">Sticker Intact/Not Tampered</label>
+        </div>
+    </div>
+
+    <!-- Date Verification Section -->
+<div class="input-group">
+    <label>Manufacturing Date:</label>
+    <input type="date" id="manufactureDate" required>
+    <label>Storage Conditions:</label>
+    <div class="storage-slider-container">
+        <input type="range" id="storageCondition" min="0" max="3" step="1" value="0">
+        <div class="slider-labels">
+            <span>Poor</span>
+            <span>Fair</span>
+            <span>Good</span>
+            <span>Excellent</span>
+        </div>
+        <div id="storageDescription" class="storage-description"></div>
+    </div>
+</div>
+    <button type="submit" class="calculate-btn">Verify Cement Product</button>
+</form>
+            <div class="results-display" id="resultsDisplay">
+                <h3>Verification Results</h3>
+                <div class="result-item" id="overallScore"></div>
+                <div class="result-item" id="brandResult"></div>
+                <div class="result-item" id="locationResult"></div>
+                <div class="result-item" id="weightResult"></div>
+                <div class="result-item" id="strengthResult"></div>
+                <div class="result-item" id="kebsResult"></div>
+                <div class="result-item" id="dateResult"></div>
+                <div class="result-item" id="recommendation"></div>
+            </div>
+        </div>
+    </main>
+
+<script>
+    // Manufacturer-Brand mapping
+    const manufacturerBrands = {
+        'bamburi': ['Nguvu', 'Power Plus', 'Tembo'],
+        'mombasa': ['Nyati', 'Nyumba'],
+        'eapc': ['Blue Triangle', 'EAPC'],
+        'national': ['Simba', 'Kunkurr'],
+        'savannah': ['Savannah Premium'],
+        'rai': ['Rai Cement'],
+        'karsan': ['Ndovu']
+    };
+
+    // Get form elements
+    const form = document.getElementById('verificationForm');
+    const manufacturerSelect = document.getElementById('manufacturerSelect');
+    const brandSelect = document.getElementById('brandSelect');
+    const resultsDisplay = document.getElementById('resultsDisplay');
+
+    // Update brand options when manufacturer is selected
+    manufacturerSelect.addEventListener('change', function() {
+        const selectedManufacturer = this.value;
+        brandSelect.disabled = !selectedManufacturer;
+        brandSelect.innerHTML = '<option value="">Select a brand...</option>';
+        
+        if (selectedManufacturer) {
+            manufacturerBrands[selectedManufacturer].forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand.toLowerCase();
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
+        }
+    });
+
+    // Calculate verification scores
+    function calculateScores() {
+        let scores = {
+            brand: 0,
+            location: 0,
+            weight: 0,
+            strength: 0,
+            kebs: 0,
+            date: 0
+        };
+
+        // Brand Verification (20 points)
+        if (manufacturerSelect.value && brandSelect.value) {
+            scores.brand = 20;
+        }
+
+        // Location Verification (20 points)
+        const locationScore = calculateLocationScore();
+        scores.location = locationScore;
+
+        // Weight Verification (15 points)
+        const weightScore = calculateWeightScore();
+        scores.weight = weightScore;
+
+        // Strength Verification (15 points)
+        const strengthScore = calculateStrengthScore();
+        scores.strength = strengthScore;
+
+        // KEBS Verification (20 points)
+        const kebsScore = calculateKebsScore();
+        scores.kebs = kebsScore;
+
+        // Date Verification (10 points)
+        const dateScore = calculateDateScore();
+        scores.date = dateScore;
+
+        return scores;
+    }
+
+    function calculateLocationScore() {
+        let score = 0;
+        if (document.getElementById('countySelect').value) score += 5;
+        if (document.getElementById('specificLocation').value) score += 5;
+        if (document.getElementById('directFactory').checked) score += 10;
+        else if (document.getElementById('authorizedDealer').checked) score += 7;
+        else if (document.getElementById('retailer').checked) score += 5;
+        return score;
+    }
+
+    function calculateWeightScore() {
+        let score = 0;
+        const weight = parseFloat(document.getElementById('actualWeight').value);
+        const tolerance = document.getElementById('weightTolerance').value;
+
+        if (weight >= 49.5 && weight <= 50.5) score += 15;
+        else if (weight >= 49 && weight <= 51) score += 10;
+        else score += 5;
+
+        return score;
+    }
+
+    function calculateStrengthScore() {
+        let score = 0;
+        const strengthClass = document.getElementById('strengthClass').value;
+        const intendedUse = document.getElementById('intendedUse').value;
+
+        if (strengthClass && intendedUse) {
+            score += 7;
+            // Check if strength class matches intended use
+            if ((strengthClass === '32.5' && intendedUse === 'residential') ||
+                (strengthClass === '42.5' && intendedUse === 'commercial') ||
+                (strengthClass === '52.5' && intendedUse === 'infrastructure')) {
+                score += 8;
+            }
+        }
+
+        return score;
+    }
+
+    function calculateKebsScore() {
+        let score = 0;
+        if (document.getElementById('kebsSticker').value) score += 5;
+        if (document.getElementById('batchNumber').value) score += 5;
+        if (document.getElementById('stickerPresent').checked) score += 5;
+        if (document.getElementById('stickerIntact').checked) score += 5;
+        return score;
+    }
+    function calculateDateScore() {
+        let score = 0;
+        if (document.getElementById('manufactureDate').value) score += 4;
+        
+        // Get storage condition score (0-3 from slider)
+        const storageValue = parseInt(document.getElementById('storageCondition').value);
+        score += storageValue * 2; // Each level is worth 2 points (max 6 points)
+        
+        return score;
+    }
+    // Form submission handler
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const scores = calculateScores();
+        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+        
+        // Update results display
+        resultsDisplay.innerHTML = `
+            <h3>Verification Results</h3>
+            <div class="result-item">Brand Verification: ${scores.brand}/20</div>
+            <div class="result-item">Location Verification: ${scores.location}/20</div>
+            <div class="result-item">Weight Verification: ${scores.weight}/15</div>
+            <div class="result-item">Strength Verification: ${scores.strength}/15</div>
+            <div class="result-item">KEBS Verification: ${scores.kebs}/20</div>
+            <div class="result-item">Date Verification: ${scores.date}/10</div>
+            <div class="result-item" style="font-weight: bold; font-size: 1.2em;">
+                Overall Score: ${totalScore}/100
+            </div>
+            <div class="result-item" style="margin-top: 1rem;">
+                ${getRecommendation(totalScore)}
+            </div>
+        `;
+        
+        resultsDisplay.classList.add('show');
+    });
+
+    function getRecommendation(score) {
+        if (score >= 90) {
+            return '<span style="color: #00a854;">✓ This cement product appears to be authentic and safe to use.</span>';
+        } else if (score >= 70) {
+            return '<span style="color: #faad14;">⚠ This cement product shows some signs of concern. Verify with the manufacturer.</span>';
+        } else {
+            return '<span style="color: #f5222d;">⚠ Warning: This cement product shows significant signs of potential counterfeiting. Do not use.</span>';
+        }
+    }
+
+    // Storage slider functionality
+    const storageSlider = document.getElementById('storageCondition');
+    const storageDescription = document.getElementById('storageDescription');
+
+    storageSlider.addEventListener('input', function() {
+        const value = parseInt(this.value);
+        let description = '';
+        let color = '';
+        
+        switch(value) {
+            case 0:
+                description = 'Poor: High risk of moisture damage';
+                color = '#ff4d4f';
+                break;
+            case 1:
+                description = 'Fair: Basic coverage provided';
+                color = '#faad14';
+                break;
+            case 2:
+                description = 'Good: Proper dry storage';
+                color = '#52c41a';
+                break;
+            case 3:
+                description = 'Excellent: Ideal storage conditions';
+                color = '#52c41a';
+                break;
+        }
+        
+        storageDescription.textContent = description;
+        storageDescription.style.backgroundColor = color + '20';
+        storageDescription.style.color = color;
+    });
+    
+    // Trigger initial description
+    storageSlider.dispatchEvent(new Event('input'));
+</script>
+    </body>
+</html>
