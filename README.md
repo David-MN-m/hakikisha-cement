@@ -5,6 +5,7 @@
 Hakikisha is a web-based Cement Verifier System designed to authenticate and manage cement products, vendors, and orders. The system provides a comprehensive platform for verifying cement products and managing the supply chain.
 
 🌐 **Live Demo**: [https://hakikisha.netlify.app/](https://hakikisha.netlify.app/)
+📦 **Status**: Continuously deployed via Netlify
 
 ## Features
 
