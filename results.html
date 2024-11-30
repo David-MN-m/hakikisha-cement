@@ -20,8 +20,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verification Results - Hakikisha Verifier</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>  
-    <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>    <style>
         :root {
             --primary-color: #0070f3;
             --secondary-color: #0366d6;
@@ -549,16 +548,15 @@
     </main>
 
 <script>
-    // Manufacturer-Brand mapping
-    const manufacturerBrands = {
-        'bamburi': ['Nguvu', 'Power Plus', 'Tembo'],
-        'mombasa': ['Nyati', 'Nyumba'],
-        'eapc': ['Blue Triangle', 'EAPC'],
-        'national': ['Simba', 'Kunkurr'],
-        'savannah': ['Savannah Premium'],
-        'rai': ['Rai Cement'],
-        'karsan': ['Ndovu']
-    };
+const brandOptions = {
+    bamburi: ['Nguvu', 'Duracem', 'Powerplus'],
+    mombasa: ['Nyumba', 'Power Plus', 'Mukwano'],
+    eapc: ['Blue Triangle', 'EAPC Plus'],
+    national: ['Simba Cement', 'Nyati'],
+    savannah: ['Savannah Premium', 'Savannah Plus'],
+    rai: ['Rai Cement'],
+    karsan: ['Ndovu Cement']
+};
 
     // Get form elements
     const form = document.getElementById('verificationForm');
@@ -569,19 +567,37 @@
     // Update brand options when manufacturer is selected
     manufacturerSelect.addEventListener('change', function() {
         const selectedManufacturer = this.value;
-        brandSelect.disabled = !selectedManufacturer;
-        brandSelect.innerHTML = '<option value="">Select a brand...</option>';
+        
+        // Clear current brand options
+        brandSelect.innerHTML = '';
         
         if (selectedManufacturer) {
-            manufacturerBrands[selectedManufacturer].forEach(brand => {
+            // Enable brand select
+            brandSelect.disabled = false;
+            
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Select brand...';
+            brandSelect.appendChild(defaultOption);
+            
+            // Add brand options for selected manufacturer
+            const brands = brandOptions[selectedManufacturer] || [];
+            brands.forEach(brand => {
                 const option = document.createElement('option');
-                option.value = brand.toLowerCase();
+                option.value = brand.toLowerCase().replace(/\s+/g, '-');
                 option.textContent = brand;
                 brandSelect.appendChild(option);
             });
+        } else {
+            // Disable brand select if no manufacturer selected
+            brandSelect.disabled = true;
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'First select a manufacturer...';
+            brandSelect.appendChild(defaultOption);
         }
     });
-
     // Calculate verification scores
     function calculateScores() {
         let scores = {
@@ -751,47 +767,47 @@
     
     // Trigger initial description
     storageSlider.dispatchEvent(new Event('input'));
-    // Origin slider initialization
-    var originSlider = document.getElementById('originSlider');
-    var originDescription = document.getElementById('originDescription');
-    
-    noUiSlider.create(originSlider, {
-        start: 0,
-        step: 1,
-        range: {
-            'min': 0,
-            'max': 2
-        },
-        pips: {
-            mode: 'values',
-            values: [0, 1, 2],
-            density: 50,
-            format: {
-                to: function(value) {
-                    const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
-                    return origins[value];
-                }
+// Origin slider initialization
+var originSlider = document.getElementById('originSlider');
+var originDescription = document.getElementById('originDescription');
+
+noUiSlider.create(originSlider, {
+    start: 0,
+    step: 1,
+    range: {
+        'min': 0,
+        'max': 2
+    },
+    pips: {
+        mode: 'values',
+        values: [0, 1, 2],
+        density: 50,
+        format: {
+            to: function(value) {
+                const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+                return origins[value];
             }
         }
-    });
-    
-    // Update description when slider value changes
-    originSlider.noUiSlider.on('update', function(values, handle) {
-        const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
-        originDescription.textContent = origins[Math.round(values[handle])];
-    });
-    
-    // Make pips clickable
-    var pips = originSlider.querySelectorAll('.noUi-value');
-    function clickOnPip() {
-        var value = Number(this.getAttribute('data-value'));
-        originSlider.noUiSlider.set(value);
     }
-    
-    for (var i = 0; i < pips.length; i++) {
-        pips[i].style.cursor = 'pointer';
-        pips[i].addEventListener('click', clickOnPip);
-    }
+});
+
+// Update description when slider value changes
+originSlider.noUiSlider.on('update', function(values, handle) {
+    const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+    originDescription.textContent = origins[Math.round(values[handle])];
+});
+
+// Make pips clickable
+var pips = originSlider.querySelectorAll('.noUi-value');
+function clickOnPip() {
+    var value = Number(this.getAttribute('data-value'));
+    originSlider.noUiSlider.set(value);
+}
+
+for (var i = 0; i < pips.length; i++) {
+    pips[i].style.cursor = 'pointer';
+    pips[i].addEventListener('click', clickOnPip);
+}
     // Weight verification calculation
     const declaredWeightInput = document.getElementById('declaredWeight');
     const actualWeightInput = document.getElementById('actualWeight');
