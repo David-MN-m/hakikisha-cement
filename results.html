@@ -255,10 +255,10 @@
 }
 
 #originSlider {
-    height: 10px;
+    height: 18px;  /* Increased height to accommodate handle */
     margin: 20px 0;
     border-radius: 0;
-    padding-top: 20px;  /* Add padding to move slider down */
+    padding-top: 20px;
 }
 
 #originSlider .noUi-connect {
@@ -272,8 +272,13 @@
     background: #2980b9;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     cursor: pointer;
-    top: -4px;
+    top: 0;  /* Changed to align with track */
     right: -9px;
+}
+
+#originSlider .noUi-handle:before,
+#originSlider .noUi-handle:after {
+    display: none;  /* Remove default lines in handle */
 }
 
 #originDescription {
@@ -296,6 +301,14 @@
 
 #originSlider .noUi-marker {
     margin-top: 5px;
+}
+
+/* Slider instruction text */
+.slider-instruction {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 10px;
+    font-style: italic;
 }
     </style>
     
@@ -354,13 +367,14 @@
         </select>
         <input type="text" id="specificLocation" placeholder="Enter specific location/town" required>
     </div>
-<div class="input-group">
-    <label>Cement Origin:</label>
-    <div class="origin-slider-container">
-        <div id="originSlider"></div>
-        <div id="originDescription"></div>
+    <div class="input-group">
+        <label>Cement Origin:</label>
+        <div class="slider-instruction">Slide or click options to select cement origin</div>
+        <div class="origin-slider-container">
+            <div id="originSlider"></div>
+            <div id="originDescription"></div>
+        </div>
     </div>
-</div>
     <!-- Weight Verification Section -->
     <div class="input-group">
         <label>Weight Verification:</label>
