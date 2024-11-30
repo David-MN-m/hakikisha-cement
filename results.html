@@ -310,6 +310,19 @@
     margin-bottom: 10px;
     font-style: italic;
 }
+/* Weight Verification Styles */
+.verification-result {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    background-color: #f8f9fa;
+}
+
+#weightResult {
+    margin-top: 10px;
+    font-size: 14px;
+}
     </style>
     
 </head>
@@ -376,16 +389,12 @@
         </div>
     </div>
     <!-- Weight Verification Section -->
-    <div class="input-group">
-        <label>Weight Verification:</label>
-        <input type="number" id="actualWeight" placeholder="Enter actual weight (kg)" step="0.1" required>
-        <select id="weightTolerance" class="form-select" required>
-            <option value="">Select weight tolerance...</option>
-            <option value="within">Within ±0.5kg of 50kg</option>
-            <option value="slight">±0.5kg to ±1kg deviation</option>
-            <option value="significant">More than ±1kg deviation</option>
-        </select>
-    </div>
+  <div class="input-group">
+      <label>Weight Verification:</label>
+      <input type="number" id="declaredWeight" placeholder="Enter declared weight (kg)" required>
+      <input type="number" id="actualWeight" placeholder="Enter actual weight (kg)" required>
+      <div id="weightResult" class="verification-result"></div>
+  </div>
 
     <!-- Strength Verification Section -->
     <div class="input-group">
@@ -692,6 +701,36 @@
         pips[i].style.cursor = 'pointer';
         pips[i].addEventListener('click', clickOnPip);
     }
+    // Weight verification calculation
+    const declaredWeightInput = document.getElementById('declaredWeight');
+    const actualWeightInput = document.getElementById('actualWeight');
+    const weightResult = document.getElementById('weightResult');
+    
+    function calculateWeightVerification() {
+        const declaredWeight = parseFloat(declaredWeightInput.value);
+        const actualWeight = parseFloat(actualWeightInput.value);
+        
+        if (!isNaN(declaredWeight) && !isNaN(actualWeight)) {
+            const tolerance = 0.02; // 2% tolerance
+            const lowerLimit = declaredWeight * (1 - tolerance);
+            const upperLimit = declaredWeight * (1 + tolerance);
+            
+            if (actualWeight >= lowerLimit && actualWeight <= upperLimit) {
+                weightResult.textContent = '✓ Weight is within acceptable range';
+                weightResult.style.color = '#27ae60';
+            } else {
+                const deviation = Math.abs(((actualWeight - declaredWeight) / declaredWeight) * 100).toFixed(1);
+                weightResult.textContent = `⚠ Weight deviation is ${deviation}% from declared weight`;
+                weightResult.style.color = '#e74c3c';
+            }
+        } else {
+            weightResult.textContent = '';
+        }
+    }
+    
+    declaredWeightInput.addEventListener('input', calculateWeightVerification);
+    actualWeightInput.addEventListener('input', calculateWeightVerification);
+
 </script>
     </body>
 </html>
