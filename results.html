@@ -323,10 +323,101 @@
     margin-top: 10px;
     font-size: 14px;
 }
+   /* Menu Styles */
+   .menu-container {
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 15px 0;
+        margin-bottom: 30px;
+    }
+
+    .menu {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+    }
+
+    .menu-item {
+        position: relative;
+    }
+
+    .menu-link {
+        color: #333;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .menu-link:hover {
+        color: var(--primary-color);
+    }
+
+    .menu-link.active {
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .menu-icon {
+        font-size: 18px;
+    }
+
+    /* Responsive Menu */
+    @media (max-width: 768px) {
+        .menu {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-link {
+            padding: 8px 15px;
+        }
+    }
     </style>
     
 </head>
 <body>
+    <div class="menu-container">
+        <ul class="menu">
+            <li class="menu-item">
+                <a href="index.html" class="menu-link">
+                    <span class="menu-icon">🏠</span>
+                    Home
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="Verify.html" class="menu-link">
+                    <span class="menu-icon">✓</span>
+                    Verify
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="results.html" class="menu-link active">
+                    <span class="menu-icon">📊</span>
+                    Results
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="orders.html" class="menu-link">
+                    <span class="menu-icon">📦</span>
+                    Orders
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="vendors.html" class="menu-link">
+                    <span class="menu-icon">👥</span>
+                    Vendors
+                </a>
+            </li>
+        </ul>
+    </div>    
     <div class="nav-container">
         <nav>
             <div class="logo">
@@ -730,7 +821,21 @@
     
     declaredWeightInput.addEventListener('input', calculateWeightVerification);
     actualWeightInput.addEventListener('input', calculateWeightVerification);
-
+    <!-- Add this JavaScript at the end of your <script> section -->
+<script>
+    // Highlight current page in menu
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop();
+        const menuLinks = document.querySelectorAll('.menu-link');
+        
+        menuLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    });
 </script>
     </body>
 </html>
