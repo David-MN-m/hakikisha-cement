@@ -3,277 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verified Cement Vendors</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="description" content="Hakikisha Verifier - Cement Vendors Directory">
+    <title>Hakikisha Verifier - Vendors</title>
     <style>
-        .vendor-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            transition: transform 0.2s;
-            margin-bottom: 20px;
+        :root {
+            --primary-color: #0070f3;
+            --primary-hover: #005bb5;
+            --background-light: #f9f9f9;
+            --text-dark: #333;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            --nav-height: 70px;
         }
+
+        /* Navigation Styles */
+        .nav-container {
+            background: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            height: var(--nav-height);
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-container img {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-container h1 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--background-light);
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            padding: 0.5rem;
+            border: none;
+            background: none;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background-color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle span.active:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle span.active:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle span.active:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: var(--nav-height);
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                gap: 0.5rem;
+                box-shadow: var(--shadow);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo-container h1 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Vendors Page Specific Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: var(--nav-height);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex-grow: 1;
+        }
+
+        .vendors-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .vendors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .vendor-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
         .vendor-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .verified-badge {
-            background-color: #28a745;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
+
+        .vendor-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
         }
-        .rating {
-            color: #ffc107;
+
+        .vendor-info {
+            padding: 1.5rem;
         }
-        .order-btn {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
+
+        .vendor-name {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .vendor-location {
+            color: #666;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vendor-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            color: #ffd700;
+        }
+
+        .vendor-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--background-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+        }
+
+        .vendor-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
             border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
             text-decoration: none;
-            display: inline-block;
+            flex: 1;
         }
-        .order-btn:hover {
-            background-color: #0056b3;
+
+        .btn-primary {
+            background-color: var(--primary-color);
             color: white;
-            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--background-light);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .vendors-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .vendors-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">Cement Shop</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+    <div class="nav-container">
+        <nav>
+            <div class="logo-container">
+                <img src="images/hakikisha-logo.png" alt="Hakikisha Logo">
+                <h1>Hakikisha Verifier</h1>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="vendors.html">Vendors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orders.html">Orders</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container my-5">
-        <h1 class="text-center mb-5">Verified Cement Vendors</h1>
-        
-        <div class="row">
-            <!-- Vendor 1 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>Premium Cement Co.</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★★ <span class="text-muted">(4.8/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Nairobi Central</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 750/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=1" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 2 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>BuildRight Cement</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★☆ <span class="text-muted">(4.2/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Westlands</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 730/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=2" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 3 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>Quality Cement Ltd</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★★ <span class="text-muted">(4.6/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Karen</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 745/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=3" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 4 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>Reliable Cement Supplies</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★☆ <span class="text-muted">(4.3/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Kilimani</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 735/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=4" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 5 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>MasterBuild Cement</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★★ <span class="text-muted">(4.7/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Lavington</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 755/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=5" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 6 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>CementPro Kenya</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★☆ <span class="text-muted">(4.4/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Parklands</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 740/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=6" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 7 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>BuildTech Solutions</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★☆ <span class="text-muted">(4.1/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> South B</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 725/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=7" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 8 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>Construction Kings</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★★ <span class="text-muted">(4.9/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Kileleshwa</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 760/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=8" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 9 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>Elite Cement Traders</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★☆ <span class="text-muted">(4.5/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Ngara</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 728/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=9" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 10 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>Cement Express Ltd</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★☆ <span class="text-muted">(4.3/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Eastleigh</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 732/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=10" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 11 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>FastBuild Cement</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★★ <span class="text-muted">(4.7/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Langata</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 748/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=11" class="order-btn">Order Now</a>
-                </div>
-            </div>
-
-            <!-- Vendor 12 -->
-            <div class="col-md-4">
-                <div class="vendor-card p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4>Supreme Cement Kenya</h4>
-                        <span class="verified-badge">Verified</span>
-                    </div>
-                    <div class="rating mb-2">
-                        ★★★★★ <span class="text-muted">(4.8/5)</span>
-                    </div>
-                    <p class="mb-2"><strong>Location:</strong> Upperhill</p>
-                    <p class="mb-2"><strong>Price:</strong> KES 752/bag</p>
-                    <p class="mb-3"><strong>Delivery:</strong> Available</p>
-                    <a href="orders.html?vendor=12" class="order-btn">Order Now</a>
-                </div>
-            </div>
-        </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Verify.html">Verify</a></li>
+                <li><a href="results.html">Results</a></li>
+                <li><a href="vendors.html" class="active">Vendors</a></li>
+                <li><a href="orders.html">Orders</a></li>
+                <li><a href="vendor-dashboard.html">Dashboard</a></li>
+            </ul>
+        </nav>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <main>
+        <div class="vendors-header">
+            <h1>Certified Cement Vendors</h1>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search vendors..." id="vendorSearch">
+                <select class="filter-select" id="locationFilter">
+                    <option value="">All Locations</option>
+                    <option value="nairobi">Nairobi</option>
+                    <option value="mombasa">Mombasa</option>
+                    <option value="kisumu">Kisumu</option>
+                    <option value="nakuru">Nakuru</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="vendors-grid" id="vendorsGrid">
+            <!-- Vendors will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Navigation JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            
+            // Animate hamburger menu
+            const spans = menuToggle.querySelectorAll('span');
+            spans.forEach(span => span.classList.toggle('active'));
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+                const spans = menuToggle.querySelectorAll('span');
+                spans.forEach(span => span.classList.remove('active'));
+            }
+        });
+
+        // Add active class to current page link
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+
+    <!-- Vendors Page JavaScript -->
+    <script>
+        // Sample vendors data
+        const vendors = [
+            {
+                id: 1,
+                name: "Bamburi Cement Depot",
+                image: "images/vendor1.jpg",
+                location: "Nairobi",
+                address: "Industrial Area, Enterprise Road",
+                rating: 4.8,
+                reviews: 156,
+                tags: ["Wholesale", "Retail", "Direct Factory"],
+                verified: true
+            },
+            {
+                id: 2,
+                name: "Mombasa Cement Hub",
+                image: "images/vendor2.jpg",
+                location: "Mombasa",
+                address: "Port Area, Mombasa Road",
+                rating: 4.6,
+                reviews: 98,
+                tags: ["Wholesale", "Bulk Orders"],
+                verified: true
+            },
+            {
+                id: 3,
+                name: "Lake Region Cement Store",
+                image: "images/vendor3.jpg",
+                location: "Kisumu",
+                address: "Kondele, Kisumu-Kakamega Road",
+                rating: 4.5,
+                reviews: 72,
+                tags: ["Retail", "Home Delivery"],
+                verified: true
+            },
+            {
+                id: 4,
+                name: "Rift Valley Builders Mart",
+                image: "images/vendor4.jpg",
+                location: "Nakuru",
+                address: "CBD, Kenyatta Avenue",
+                rating: 4.7,
+                reviews: 113,
+                tags: ["Wholesale", "Retail", "Technical Support"],
+                verified: true
+            }
+        ];
+
+        // Function to render star rating
+        function renderStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '★';
+            }
+            if (hasHalfStar) {
+                stars += '½';
+            }
+            return stars;
+        }
+
+        // Function to render vendor card
+        function renderVendorCard(vendor) {
+            return `
+                <div class="vendor-card">
+                    <img src="${vendor.image}" alt="${vendor.name}" class="vendor-image">
+                    <div class="vendor-info">
+                        <h2 class="vendor-name">${vendor.name}</h2>
+                        <div class="vendor-location">
+                            <span>📍</span>
+                            <span>${vendor.location} - ${vendor.address}</span>
+                        </div>
+                        <div class="vendor-rating">
+                            <span class="star">${renderStars(vendor.rating)}</span>
+                            <span>${vendor.rating} (${vendor.reviews} reviews)</span>
+                        </div>
+                        <div class="vendor-tags">
+                            ${vendor.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="vendor-actions">
+                            <a href="orders.html?vendor=${vendor.id}" class="btn btn-primary">Place Order</a>
+                            <button class="btn btn-secondary" onclick="contactVendor(${vendor.id})">Contact</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to filter vendors
+        function filterVendors() {
+            const searchTerm = document.getElementById('vendorSearch').value.toLowerCase();
+            const locationFilter = document.getElementById('locationFilter').value.toLowerCase();
+            
+            const filteredVendors = vendors.filter(vendor => {
+                const matchesSearch = vendor.name.toLowerCase().includes(searchTerm) ||
+                                    vendor.address.toLowerCase().includes(searchTerm);
+                const matchesLocation = !locationFilter || vendor.location.toLowerCase() === locationFilter;
+                return matchesSearch && matchesLocation;
+            });
+
+            document.getElementById('vendorsGrid').innerHTML = 
+                filteredVendors.map(vendor => renderVendorCard(vendor)).join('');
+        }
+
+        // Function to contact vendor
+        function contactVendor(vendorId) {
+            // Implementation for contacting vendor
+            alert('Contact feature coming soon!');
+        }
+
+        // Add event listeners
+        document.getElementById('vendorSearch').addEventListener('input', filterVendors);
+        document.getElementById('locationFilter').addEventListener('change', filterVendors);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', filterVendors);
+    </script>
 </body>
 </html>
