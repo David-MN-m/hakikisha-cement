@@ -19,6 +19,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verification Results - Hakikisha Verifier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>  
     <style>
         :root {
             --primary-color: #0070f3;
@@ -246,6 +248,55 @@
      font-weight: 500;
      transition: all 0.3s;
  }       
+/* Origin Slider Styles */
+.origin-slider-container {
+    margin: 20px 0;
+    padding: 20px 0;
+}
+
+#originSlider {
+    height: 10px;
+    margin: 20px 0;
+    border-radius: 0;
+    padding-top: 20px;  /* Add padding to move slider down */
+}
+
+#originSlider .noUi-connect {
+    background: var(--primary-color);
+}
+
+#originSlider .noUi-handle {
+    width: 18px;
+    height: 18px;
+    border-radius: 0;
+    background: #2980b9;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    cursor: pointer;
+    top: -4px;
+    right: -9px;
+}
+
+#originDescription {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Add these new styles to fix the overlapping */
+#originSlider .noUi-pips {
+    padding-top: 5px;
+}
+
+#originSlider .noUi-value {
+    font-size: 12px;
+    padding-top: 15px;
+    white-space: nowrap;
+}
+
+#originSlider .noUi-marker {
+    margin-top: 5px;
+}
     </style>
     
 </head>
@@ -302,14 +353,14 @@
             <!-- Add more counties as needed -->
         </select>
         <input type="text" id="specificLocation" placeholder="Enter specific location/town" required>
-        <label>Distribution Path:</label>
-        <div class="checkbox-group">
-            <input type="checkbox" id="directFactory"> <label for="directFactory">Direct from Factory</label>
-            <input type="checkbox" id="authorizedDealer"> <label for="authorizedDealer">Authorized Dealer</label>
-            <input type="checkbox" id="retailer"> <label for="retailer">Retailer</label>
-        </div>
     </div>
-
+<div class="input-group">
+    <label>Cement Origin:</label>
+    <div class="origin-slider-container">
+        <div id="originSlider"></div>
+        <div id="originDescription"></div>
+    </div>
+</div>
     <!-- Weight Verification Section -->
     <div class="input-group">
         <label>Weight Verification:</label>
@@ -586,6 +637,47 @@
     
     // Trigger initial description
     storageSlider.dispatchEvent(new Event('input'));
+    // Origin slider initialization
+    var originSlider = document.getElementById('originSlider');
+    var originDescription = document.getElementById('originDescription');
+    
+    noUiSlider.create(originSlider, {
+        start: 0,
+        step: 1,
+        range: {
+            'min': 0,
+            'max': 2
+        },
+        pips: {
+            mode: 'values',
+            values: [0, 1, 2],
+            density: 50,
+            format: {
+                to: function(value) {
+                    const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+                    return origins[value];
+                }
+            }
+        }
+    });
+    
+    // Update description when slider value changes
+    originSlider.noUiSlider.on('update', function(values, handle) {
+        const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+        originDescription.textContent = origins[Math.round(values[handle])];
+    });
+    
+    // Make pips clickable
+    var pips = originSlider.querySelectorAll('.noUi-value');
+    function clickOnPip() {
+        var value = Number(this.getAttribute('data-value'));
+        originSlider.noUiSlider.set(value);
+    }
+    
+    for (var i = 0; i < pips.length; i++) {
+        pips[i].style.cursor = 'pointer';
+        pips[i].addEventListener('click', clickOnPip);
+    }
 </script>
     </body>
 </html>
