@@ -20,7 +20,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verification Results - Hakikisha Verifier</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>    <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+<style>
         :root {
             --primary-color: #0070f3;
             --secondary-color: #0366d6;
@@ -379,7 +380,34 @@
             padding: 8px 15px;
         }
     }
-    </style>
+.radio-group {
+    margin: 10px 0;
+}
+
+.radio-group label {
+    margin-right: 15px;
+}
+
+.radio-group div {
+    margin-top: 5px;
+    display: grid;  /* Change to grid */
+    grid-template-columns: auto 1fr;  /* Two columns: radio+label pairs */
+    gap: 40px;  /* Space between options */
+    align-items: center;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* Add these for the radio button wrapper */
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;  /* Space between radio and its label */
+}
+
+</style>
     
 </head>
 <body>
@@ -459,15 +487,56 @@
     <!-- Location Verification Section -->
     <div class="input-group">
         <label for="locationInput">Location Details:</label>
-        <select id="countySelect" class="form-select" required>
-            <option value="">Select County...</option>
-            <option value="nairobi">Nairobi</option>
-            <option value="mombasa">Mombasa</option>
-            <option value="kisumu">Kisumu</option>
-            <option value="nakuru">Nakuru</option>
-            <option value="uasin-gishu">Uasin Gishu</option>
-            <!-- Add more counties as needed -->
-        </select>
+<select id="countySelect" class="form-select" required>
+    <option value="">Select County...</option>
+    <option value="baringo">Baringo</option>
+    <option value="bomet">Bomet</option>
+    <option value="bungoma">Bungoma</option>
+    <option value="busia">Busia</option>
+    <option value="elgeyo-marakwet">Elgeyo Marakwet</option>
+    <option value="embu">Embu</option>
+    <option value="garissa">Garissa</option>
+    <option value="homa-bay">Homa Bay</option>
+    <option value="isiolo">Isiolo</option>
+    <option value="kajiado">Kajiado</option>
+    <option value="kakamega">Kakamega</option>
+    <option value="kericho">Kericho</option>
+    <option value="kiambu">Kiambu</option>
+    <option value="kilifi">Kilifi</option>
+    <option value="kirinyaga">Kirinyaga</option>
+    <option value="kisii">Kisii</option>
+    <option value="kisumu">Kisumu</option>
+    <option value="kitui">Kitui</option>
+    <option value="kwale">Kwale</option>
+    <option value="laikipia">Laikipia</option>
+    <option value="lamu">Lamu</option>
+    <option value="machakos">Machakos</option>
+    <option value="makueni">Makueni</option>
+    <option value="mandera">Mandera</option>
+    <option value="marsabit">Marsabit</option>
+    <option value="meru">Meru</option>
+    <option value="migori">Migori</option>
+    <option value="mombasa">Mombasa</option>
+    <option value="muranga">Murang'a</option>
+    <option value="nairobi">Nairobi</option>
+    <option value="nakuru">Nakuru</option>
+    <option value="nandi">Nandi</option>
+    <option value="narok">Narok</option>
+    <option value="nyamira">Nyamira</option>
+    <option value="nyandarua">Nyandarua</option>
+    <option value="nyeri">Nyeri</option>
+    <option value="samburu">Samburu</option>
+    <option value="siaya">Siaya</option>
+    <option value="taita-taveta">Taita Taveta</option>
+    <option value="tana-river">Tana River</option>
+    <option value="tharaka-nithi">Tharaka Nithi</option>
+    <option value="trans-nzoia">Trans Nzoia</option>
+    <option value="turkana">Turkana</option>
+    <option value="uasin-gishu">Uasin Gishu</option>
+    <option value="vihiga">Vihiga</option>
+    <option value="wajir">Wajir</option>
+    <option value="west-pokot">West Pokot</option>
+</select>
         <input type="text" id="specificLocation" placeholder="Enter specific location/town" required>
     </div>
     <div class="input-group">
@@ -504,18 +573,37 @@
         </select>
     </div>
 
-    <!-- KEBS Verification Section -->
-    <div class="input-group">
-        <label>KEBS Verification:</label>
-        <input type="text" id="kebsSticker" placeholder="Enter KEBS sticker code" required>
-        <input type="text" id="batchNumber" placeholder="Enter batch number" required>
-        <div class="checkbox-group">
-            <input type="checkbox" id="stickerPresent"> <label for="stickerPresent">KEBS Sticker Present</label>
-            <input type="checkbox" id="stickerIntact"> <label for="stickerIntact">Sticker Intact/Not Tampered</label>
+<!-- KEBS Verification Section -->
+<div class="input-group">
+    <label>KEBS Verification:</label>
+    <div class="radio-group">
+        <label>KEBS Sticker Present:</label>
+        <div>
+            <div class="radio-option">
+                <input type="radio" id="kebsYes" name="kebsPresent" value="yes" required>
+                <label for="kebsYes">Yes</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="kebsNo" name="kebsPresent" value="no" required>
+                <label for="kebsNo">No</label>
+            </div>
         </div>
     </div>
-
-    <!-- Date Verification Section -->
+    <div class="radio-group">
+        <label>Sticker Condition:</label>
+        <div>
+            <div class="radio-option">
+                <input type="radio" id="stickerIntact" name="stickerCondition" value="intact" required>
+                <label for="stickerIntact">Intact</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="stickerTampered" name="stickerCondition" value="tampered" required>
+                <label for="stickerTampered">Tampered</label>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Date Verification Section -->
 <div class="input-group">
     <label>Manufacturing Date:</label>
     <input type="date" id="manufactureDate" required>
@@ -677,15 +765,23 @@ const brandOptions = {
         return score;
     }
 
-    function calculateKebsScore() {
-        let score = 0;
-        if (document.getElementById('kebsSticker').value) score += 5;
-        if (document.getElementById('batchNumber').value) score += 5;
-        if (document.getElementById('stickerPresent').checked) score += 5;
-        if (document.getElementById('stickerIntact').checked) score += 5;
-        return score;
+function calculateKebsScore() {
+    let score = 0;
+    const kebsPresent = document.querySelector('input[name="kebsPresent"]:checked');
+    const stickerCondition = document.querySelector('input[name="stickerCondition"]:checked');
+
+    // Check if KEBS sticker is present (10 points)
+    if (kebsPresent && kebsPresent.value === 'yes') {
+        score += 10;
+        
+        // Only check sticker condition if sticker is present
+        if (stickerCondition && stickerCondition.value === 'intact') {
+            score += 10; // Additional 10 points for intact sticker
+        }
     }
-    function calculateDateScore() {
+
+    return score;
+}    function calculateDateScore() {
         let score = 0;
         if (document.getElementById('manufactureDate').value) score += 4;
         
@@ -767,47 +863,6 @@ const brandOptions = {
     
     // Trigger initial description
     storageSlider.dispatchEvent(new Event('input'));
-// Origin slider initialization
-var originSlider = document.getElementById('originSlider');
-var originDescription = document.getElementById('originDescription');
-
-noUiSlider.create(originSlider, {
-    start: 0,
-    step: 1,
-    range: {
-        'min': 0,
-        'max': 2
-    },
-    pips: {
-        mode: 'values',
-        values: [0, 1, 2],
-        density: 50,
-        format: {
-            to: function(value) {
-                const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
-                return origins[value];
-            }
-        }
-    }
-});
-
-// Update description when slider value changes
-originSlider.noUiSlider.on('update', function(values, handle) {
-    const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
-    originDescription.textContent = origins[Math.round(values[handle])];
-});
-
-// Make pips clickable
-var pips = originSlider.querySelectorAll('.noUi-value');
-function clickOnPip() {
-    var value = Number(this.getAttribute('data-value'));
-    originSlider.noUiSlider.set(value);
-}
-
-for (var i = 0; i < pips.length; i++) {
-    pips[i].style.cursor = 'pointer';
-    pips[i].addEventListener('click', clickOnPip);
-}
     // Weight verification calculation
     const declaredWeightInput = document.getElementById('declaredWeight');
     const actualWeightInput = document.getElementById('actualWeight');
@@ -853,5 +908,101 @@ for (var i = 0; i < pips.length; i++) {
         });
     });
 </script>
-    </body>
+<script>
+    // Origin slider initialization
+    document.addEventListener('DOMContentLoaded', function() {
+        var originSlider = document.getElementById('originSlider');
+        var originDescription = document.getElementById('originDescription');
+
+        if (originSlider && !originSlider.noUiSlider) {
+            noUiSlider.create(originSlider, {
+                start: 0,
+                step: 1,
+                range: {
+                    'min': 0,
+                    'max': 2
+                },
+                pips: {
+                    mode: 'values',
+                    values: [0, 1, 2],
+                    density: 50,
+                    format: {
+                        to: function(value) {
+                            const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+                            return origins[value];
+                        }
+                    }
+                }
+            });
+
+            // Update description when slider value changes
+            originSlider.noUiSlider.on('update', function(values, handle) {
+                const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+                originDescription.textContent = origins[Math.round(values[handle])];
+            });
+
+            // Make pips clickable
+            var pips = originSlider.querySelectorAll('.noUi-value');
+            function clickOnPip() {
+                var value = Number(this.getAttribute('data-value'));
+                originSlider.noUiSlider.set(value);
+            }
+
+            for (var i = 0; i < pips.length; i++) {
+                pips[i].style.cursor = 'pointer';
+                pips[i].addEventListener('click', clickOnPip);
+            }
+        }
+    });
+</script>
+<script>
+    // Brand selection functionality
+    const brandOptions = {
+        bamburi: ['Nguvu', 'Duracem', 'Powerplus'],
+        mombasa: ['Nyumba', 'Power Plus', 'Mukwano'],
+        eapc: ['Blue Triangle', 'EAPC Plus'],
+        national: ['Simba Cement', 'Nyati'],
+        savannah: ['Savannah Premium', 'Savannah Plus'],
+        rai: ['Rai Cement'],
+        karsan: ['Ndovu Cement']
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const manufacturerSelect = document.getElementById('manufacturerSelect');
+        const brandSelect = document.getElementById('brandSelect');
+
+        manufacturerSelect.addEventListener('change', function() {
+            // Clear existing options
+            brandSelect.innerHTML = '';
+            
+            if (this.value) {
+                // Enable brand select
+                brandSelect.disabled = false;
+                
+                // Add default option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select a brand...';
+                brandSelect.appendChild(defaultOption);
+                
+                // Add brand options for selected manufacturer
+                const brands = brandOptions[this.value] || [];
+                brands.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand.toLowerCase().replace(/\s+/g, '-');
+                    option.textContent = brand;
+                    brandSelect.appendChild(option);
+                });
+            } else {
+                // Disable and reset brand select if no manufacturer selected
+                brandSelect.disabled = true;
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'First select a manufacturer...';
+                brandSelect.appendChild(defaultOption);
+            }
+        });
+    });
+</script>
+</body>
 </html>
