@@ -716,146 +716,130 @@ const brandOptions = {
         }
     });
     // Calculate verification scores
-    function calculateScores() {
-        let scores = {
-            brand: 0,
-            location: 0,
-            weight: 0,
-            strength: 0,
-            kebs: 0,
-            date: 0
-        };
+function calculateScores() {
+    let scores = {
+        brand: 0,
+        location: 0,
+        weight: 0,
+        strength: 0,
+        kebs: 0,
+        date: 0
+    };
 
-        // Brand Verification (20 points)
-        if (manufacturerSelect.value && brandSelect.value) {
-            scores.brand = 20;
+    // Brand Verification (20 points)
+    if (manufacturerSelect.value && brandSelect.value) {
+        scores.brand = 20;
+    }
+
+    // Location Verification (20 points)
+    scores.location = calculateLocationScore();
+
+    // Weight Verification (15 points)
+    scores.weight = calculateWeightScore();
+
+    // Strength Verification (15 points)
+    scores.strength = calculateStrengthScore();
+
+    // KEBS Verification (20 points)
+    scores.kebs = calculateKebsScore();
+
+    // Date Verification (10 points)
+    scores.date = calculateDateScore();
+
+    return scores;
+}
+
+function calculateLocationScore() {
+    let score = 0;
+    if (document.getElementById('countySelect').value) score += 5;
+    if (document.getElementById('specificLocation').value) score += 5;
+    if (document.getElementById('directFactory').checked) score += 10;
+    else if (document.getElementById('authorizedDealer').checked) score += 7;
+    else if (document.getElementById('retailer').checked) score += 5;
+    return score;
+}
+
+function calculateWeightScore() {
+    let score = 0;
+    const weight = parseFloat(document.getElementById('actualWeight').value);
+    const tolerance = document.getElementById('weightTolerance').value;
+
+    if (weight >= 49.5 && weight <= 50.5) score += 15;
+    else if (weight >= 49 && weight <= 51) score += 10;
+    else score += 5;
+
+    return score;
+}
+
+function calculateStrengthScore() {
+    let score = 0;
+    const strengthClass = document.getElementById('strengthClass').value;
+    const intendedUse = document.getElementById('intendedUse').value;
+
+    if (strengthClass && intendedUse) {
+        score += 7;
+        if ((strengthClass === '32.5' && intendedUse === 'residential') ||
+            (strengthClass === '42.5' && intendedUse === 'commercial') ||
+            (strengthClass === '52.5' && intendedUse === 'infrastructure')) {
+            score += 8;
         }
-
-        // Location Verification (20 points)
-        const locationScore = calculateLocationScore();
-        scores.location = locationScore;
-
-        // Weight Verification (15 points)
-        const weightScore = calculateWeightScore();
-        scores.weight = weightScore;
-
-        // Strength Verification (15 points)
-        const strengthScore = calculateStrengthScore();
-        scores.strength = strengthScore;
-
-        // KEBS Verification (20 points)
-        const kebsScore = calculateKebsScore();
-        scores.kebs = kebsScore;
-
-        // Date Verification (10 points)
-        const dateScore = calculateDateScore();
-        scores.date = dateScore;
-
-        return scores;
     }
 
-    function calculateLocationScore() {
-        let score = 0;
-        if (document.getElementById('countySelect').value) score += 5;
-        if (document.getElementById('specificLocation').value) score += 5;
-        if (document.getElementById('directFactory').checked) score += 10;
-        else if (document.getElementById('authorizedDealer').checked) score += 7;
-        else if (document.getElementById('retailer').checked) score += 5;
-        return score;
-    }
-
-    function calculateWeightScore() {
-        let score = 0;
-        const weight = parseFloat(document.getElementById('actualWeight').value);
-        const tolerance = document.getElementById('weightTolerance').value;
-
-        if (weight >= 49.5 && weight <= 50.5) score += 15;
-        else if (weight >= 49 && weight <= 51) score += 10;
-        else score += 5;
-
-        return score;
-    }
-
-    function calculateStrengthScore() {
-        let score = 0;
-        const strengthClass = document.getElementById('strengthClass').value;
-        const intendedUse = document.getElementById('intendedUse').value;
-
-        if (strengthClass && intendedUse) {
-            score += 7;
-            // Check if strength class matches intended use
-            if ((strengthClass === '32.5' && intendedUse === 'residential') ||
-                (strengthClass === '42.5' && intendedUse === 'commercial') ||
-                (strengthClass === '52.5' && intendedUse === 'infrastructure')) {
-                score += 8;
-            }
-        }
-
-        return score;
-    }
+    return score;
+}
 
 function calculateKebsScore() {
     let score = 0;
     const kebsPresent = document.querySelector('input[name="kebsPresent"]:checked');
     const stickerCondition = document.querySelector('input[name="stickerCondition"]:checked');
 
-    // Check if KEBS sticker is present (10 points)
     if (kebsPresent && kebsPresent.value === 'yes') {
         score += 10;
-        
-        // Only check sticker condition if sticker is present
         if (stickerCondition && stickerCondition.value === 'intact') {
-            score += 10; // Additional 10 points for intact sticker
+            score += 10;
         }
     }
 
     return score;
-}    function calculateDateScore() {
-        let score = 0;
-        if (document.getElementById('manufactureDate').value) score += 4;
-        
-        // Get storage condition score (0-3 from slider)
-        const storageValue = parseInt(document.getElementById('storageCondition').value);
-        score += storageValue * 2; // Each level is worth 2 points (max 6 points)
-        
-        return score;
-    }
-    // Form submission handler
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const scores = calculateScores();
-        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
-        
-        // Update results display
-        resultsDisplay.innerHTML = `
-            <h3>Verification Results</h3>
-            <div class="result-item">Brand Verification: ${scores.brand}/20</div>
-            <div class="result-item">Location Verification: ${scores.location}/20</div>
-            <div class="result-item">Weight Verification: ${scores.weight}/15</div>
-            <div class="result-item">Strength Verification: ${scores.strength}/15</div>
-            <div class="result-item">KEBS Verification: ${scores.kebs}/20</div>
-            <div class="result-item">Date Verification: ${scores.date}/10</div>
-            <div class="result-item" style="font-weight: bold; font-size: 1.2em;">
-                Overall Score: ${totalScore}/100
-            </div>
-            <div class="result-item" style="margin-top: 1rem;">
-                ${getRecommendation(totalScore)}
-            </div>
-        `;
-        
-        resultsDisplay.classList.add('show');
-    });
+}
 
-    function getRecommendation(score) {
-        if (score >= 90) {
-            return '<span style="color: #00a854;">✓ This cement product appears to be authentic and safe to use.</span>';
-        } else if (score >= 70) {
-            return '<span style="color: #faad14;">⚠ This cement product shows some signs of concern. Verify with the manufacturer.</span>';
-        } else {
-            return '<span style="color: #f5222d;">⚠ Warning: This cement product shows significant signs of potential counterfeiting. Do not use.</span>';
-        }
+function calculateDateScore() {
+    let score = 0;
+    if (document.getElementById('manufactureDate').value) score += 4;
+    const storageValue = parseInt(document.getElementById('storageCondition').value);
+    score += storageValue * 2;
+    return score;
+}
+
+// Form submission handler
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const scores = calculateScores();
+    const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+    
+    document.getElementById('overallScore').innerHTML = `<strong>Overall Score:</strong> ${totalScore}/100`;
+    document.getElementById('brandResult').innerHTML = `<strong>Brand Verification:</strong> ${scores.brand}/20`;
+    document.getElementById('locationResult').innerHTML = `<strong>Location Verification:</strong> ${scores.location}/20`;
+    document.getElementById('weightResult').innerHTML = `<strong>Weight Verification:</strong> ${scores.weight}/15`;
+    document.getElementById('strengthResult').innerHTML = `<strong>Strength Verification:</strong> ${scores.strength}/15`;
+    document.getElementById('kebsResult').innerHTML = `<strong>KEBS Verification:</strong> ${scores.kebs}/20`;
+    document.getElementById('dateResult').innerHTML = `<strong>Date Verification:</strong> ${scores.date}/10`;
+    document.getElementById('recommendation').innerHTML = getRecommendation(totalScore);
+    
+    resultsDisplay.classList.add('show');
+    resultsDisplay.scrollIntoView({ behavior: 'smooth' });
+});
+
+function getRecommendation(score) {
+    if (score >= 90) {
+        return '<span style="color: #28a745;">✓ This cement product appears to be authentic and safe to use.</span>';
+    } else if (score >= 70) {
+        return '<span style="color: #ffc107;">⚠ This cement product shows some signs of concern. Verify with the manufacturer.</span>';
+    } else {
+        return '<span style="color: #dc3545;">⚠ Warning: This cement product shows significant signs of potential counterfeiting. Do not use.</span>';
     }
+}
 
     // Storage slider functionality
     const storageSlider = document.getElementById('storageCondition');
