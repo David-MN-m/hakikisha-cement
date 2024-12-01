@@ -406,6 +406,24 @@
     align-items: center;
     gap: 5px;  /* Space between radio and its label */
 }
+.results-display {
+    display: none;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.results-display.show {
+    display: block;
+}
+
+.result-item {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
 
 </style>
     
@@ -632,6 +650,17 @@
                 <div class="result-item" id="dateResult"></div>
                 <div class="result-item" id="recommendation"></div>
             </div>
+        </div>
+        <div id="resultsDisplay" class="results-display">
+            <h3>Verification Results</h3>
+            <div class="result-item" id="overallScore"></div>
+            <div class="result-item" id="brandResult"></div>
+            <div class="result-item" id="locationResult"></div>
+            <div class="result-item" id="weightResult"></div>
+            <div class="result-item" id="strengthResult"></div>
+            <div class="result-item" id="kebsResult"></div>
+            <div class="result-item" id="dateResult"></div>
+            <div class="result-item" id="recommendation"></div>
         </div>
     </main>
 
@@ -1003,6 +1032,37 @@ function calculateKebsScore() {
             }
         });
     });
+    const form = document.getElementById('verificationForm');
+    const resultsDisplay = document.getElementById('resultsDisplay');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const scores = calculateScores();
+        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+        
+        document.getElementById('overallScore').innerHTML = `<strong>Overall Score:</strong> ${totalScore}/100`;
+        document.getElementById('brandResult').innerHTML = `<strong>Brand Verification:</strong> ${scores.brand}/20`;
+        document.getElementById('locationResult').innerHTML = `<strong>Location Verification:</strong> ${scores.location}/20`;
+        document.getElementById('weightResult').innerHTML = `<strong>Weight Verification:</strong> ${scores.weight}/15`;
+        document.getElementById('strengthResult').innerHTML = `<strong>Strength Verification:</strong> ${scores.strength}/15`;
+        document.getElementById('kebsResult').innerHTML = `<strong>KEBS Verification:</strong> ${scores.kebs}/20`;
+        document.getElementById('dateResult').innerHTML = `<strong>Date Verification:</strong> ${scores.date}/10`;
+        document.getElementById('recommendation').innerHTML = getRecommendation(totalScore);
+        
+        resultsDisplay.classList.add('show');
+        resultsDisplay.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    function getRecommendation(score) {
+        if (score >= 90) {
+            return '<span style="color: #28a745;">✓ This cement product appears to be authentic and safe to use.</span>';
+        } else if (score >= 70) {
+            return '<span style="color: #ffc107;">⚠ This cement product shows some signs of concern. Verify with the manufacturer.</span>';
+        } else {
+            return '<span style="color: #dc3545;">⚠ Warning: This cement product shows significant signs of potential counterfeiting. Do not use.</span>';
+        }
+    }
 </script>
 </body>
 </html>
