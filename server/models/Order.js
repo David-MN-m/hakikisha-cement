@@ -6,41 +6,51 @@ const orderSchema = new mongoose.Schema({
         ref: 'Vendor',
         required: true
     },
-    customerInfo: {
-        firstName: { type: String, required: true },
-        lastName: { type: String, required: true },
-        email: { type: String, required: true },
-        phone: { type: String, required: true }
-    },
-    orderDetails: {
-        quantity: { type: Number, required: true },
-        deliveryDate: { type: Date, required: true },
-        totalAmount: { type: Number, required: true }
-    },
-    deliveryAddress: {
-        street: { type: String, required: true },
-        city: { type: String, required: true },
-        location: { type: String, required: true }
-    },
-    paymentMethod: {
+    customerName: {
         type: String,
-        enum: ['mpesa', 'card', 'bank'],
         required: true
     },
+    customerEmail: {
+        type: String,
+        required: true
+    },
+    customerPhone: {
+        type: String,
+        required: true
+    },
+    deliveryAddress: {
+        type: String,
+        required: true
+    },
+    cementType: {
+        type: String,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true,
+        min: 1
+    },
+    totalAmount: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'],
+        default: 'pending'
+    },
+    orderDate: {
+        type: Date,
+        default: Date.now
+    },
+    deliveryDate: Date,
     paymentStatus: {
         type: String,
         enum: ['pending', 'paid', 'failed'],
         default: 'pending'
     },
-    orderStatus: {
-        type: String,
-        enum: ['pending', 'confirmed', 'delivered'],
-        default: 'pending'
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    paymentMethod: String
 });
 
 module.exports = mongoose.model('Order', orderSchema);

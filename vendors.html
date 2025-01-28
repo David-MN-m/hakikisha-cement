@@ -321,6 +321,21 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .orders-notification {
+            position: relative;
+        }
+
+        .orders-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -343,6 +358,9 @@
                 <li><a href="orders.html">Orders</a></li>
                 <li><a href="vendor-dashboard.html">Dashboard</a></li>
             </ul>
+            <div class="orders-notification" id="ordersNotification">
+                <span class="orders-count">0</span>
+            </div>
         </nav>
     </div>
 
@@ -350,8 +368,8 @@
         <div class="vendors-header">
             <h1>Certified Cement Vendors</h1>
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search vendors..." id="vendorSearch">
-                <select class="filter-select" id="locationFilter">
+                <input type="text" class="search-input" placeholder="Search vendors..." id="vendorSearch" aria-label="Search vendors">
+                <select class="filter-select" id="locationFilter" aria-label="Filter by location">
                     <option value="">All Locations</option>
                     <option value="nairobi">Nairobi</option>
                     <option value="mombasa">Mombasa</option>
@@ -361,12 +379,12 @@
             </div>
         </div>
 
-        <div class="vendors-grid" id="vendorsGrid">
+        <div class="vendors-grid" id="vendorsGrid" aria-live="polite">
             <!-- Vendors will be populated by JavaScript -->
         </div>
     </main>
 
-    <!-- Navigation JavaScript -->
+    <script src="scripts/auth.js"></script>
     <script>
         // Mobile menu toggle
         const menuToggle = document.querySelector('.menu-toggle');
@@ -396,10 +414,7 @@
                 link.classList.add('active');
             }
         });
-    </script>
 
-    <!-- Vendors Page JavaScript -->
-    <script>
         // Sample vendors data
         const vendors = [
             {
@@ -448,7 +463,6 @@
             }
         ];
 
-        // Function to render star rating
         function renderStars(rating) {
             const fullStars = Math.floor(rating);
             const hasHalfStar = rating % 1 !== 0;
@@ -463,13 +477,12 @@
             return stars;
         }
 
-        // Function to render vendor card
         function renderVendorCard(vendor) {
             return `
-                <div class="vendor-card">
+                <div class="vendor-card" role="article" aria-labelledby="vendor-name-${vendor.id}">
                     <img src="${vendor.image}" alt="${vendor.name}" class="vendor-image">
                     <div class="vendor-info">
-                        <h2 class="vendor-name">${vendor.name}</h2>
+                        <h2 class="vendor-name" id="vendor-name-${vendor.id}">${vendor.name}</h2>
                         <div class="vendor-location">
                             <span>📍</span>
                             <span>${vendor.location} - ${vendor.address}</span>
@@ -490,7 +503,6 @@
             `;
         }
 
-        // Function to filter vendors
         function filterVendors() {
             const searchTerm = document.getElementById('vendorSearch').value.toLowerCase();
             const locationFilter = document.getElementById('locationFilter').value.toLowerCase();
@@ -506,18 +518,38 @@
                 filteredVendors.map(vendor => renderVendorCard(vendor)).join('');
         }
 
-        // Function to contact vendor
         function contactVendor(vendorId) {
-            // Implementation for contacting vendor
             alert('Contact feature coming soon!');
         }
 
-        // Add event listeners
         document.getElementById('vendorSearch').addEventListener('input', filterVendors);
         document.getElementById('locationFilter').addEventListener('change', filterVendors);
 
-        // Initialize page
         document.addEventListener('DOMContentLoaded', filterVendors);
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!checkAuth()) {
+                return; // Page will redirect if not authenticated
+            }
+        });
+
+        // Function to check for new orders
+        function checkNewOrders() {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            const pendingOrders = orders.filter(order => order.status === 'pending');
+            
+            const notificationBadge = document.getElementById('ordersNotification');
+            if (pendingOrders.length > 0) {
+                notificationBadge.querySelector('.orders-count').textContent = pendingOrders.length;
+                notificationBadge.style.display = 'block';
+            } else {
+                notificationBadge.style.display = 'none';
+            }
+        }
+
+        // Check for new orders periodically
+        setInterval(checkNewOrders, 5000);
     </script>
 </body>
 </html>

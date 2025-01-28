@@ -5,32 +5,30 @@ const vendorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    location: {
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
         type: String,
         required: true
     },
-    price: {
-        type: Number,
+    company: {
+        type: String,
         required: true
     },
-    rating: {
-        type: Number,
-        default: 0
+    location: String,
+    businessType: {
+        type: String,
+        enum: ['manufacturer', 'distributor', 'retailer']
     },
+    phone: String,
     verified: {
         type: Boolean,
         default: false
     },
-    deliveryAvailable: {
-        type: Boolean,
-        default: true
-    },
-    contactInfo: {
-        email: String,
-        phone: String,
-        address: String
-    },
-    createdAt: {
+    registrationDate: {
         type: Date,
         default: Date.now
     }

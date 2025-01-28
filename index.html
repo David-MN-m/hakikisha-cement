@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Landing Page with Calculator</title>
+  <meta name="description" content="Hakikisha Verifier - Cement Product Verification System">
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <title>Hakikisha Verifier - Home</title>
+  <link rel="stylesheet" href="styles/main.css">
   <style>
     /* General styles for the body */
     body {
@@ -146,8 +149,6 @@
     }
   </style>
 </head>
-<body>
-
   <!-- Landing Page Content -->
   <div class="landing-card" id="landingCard" role="region" aria-label="Welcome Section">
     <img src="images/hakikisha-verifier-logo.png" alt="Hakikisha Verifier Logo" style="width: 200px; height: auto; margin-bottom: 20px;">
@@ -159,7 +160,7 @@
   </div>
 
   <!-- Calculator Content -->
-  <div class="calculator" id="calculator">
+  <div class="calculator" id="calculator" role="region" aria-label="Calculator Section">
     <h2>Simple Calculator</h2>
     <input type="number" id="num1" placeholder="Enter number 1">
     <input type="number" id="num2" placeholder="Enter number 2">
@@ -169,7 +170,7 @@
   </div>
 
   <!-- Sponsors Section -->
-  <section class="sponsors-section">
+  <section class="sponsors-section" role="region" aria-label="Sponsors Section">
     <h2>Our Sponsors</h2>
     <div class="sponsors-container">
       <div class="sponsor-circle"></div>
@@ -181,6 +182,36 @@
     </div>
   </section>
 
+  <div class="menu-container">
+    <ul class="menu">
+      <li class="menu-item">
+        <a href="index.html" class="menu-link active">
+          <span class="menu-icon">🏠</span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="Verify.html" class="menu-link">
+          <span class="menu-icon">✓</span>
+          Verify
+        </a>
+      </li>
+      <li class="menu-item vendor-only" style="display: none;">
+        <a href="vendors.html" class="menu-link">
+          <span class="menu-icon">👥</span>
+          Vendor Dashboard
+        </a>
+      </li>
+      <li class="menu-item" id="authButton">
+        <a href="vendor-login.html" class="menu-link">
+          <span class="menu-icon">🔒</span>
+          Vendor Login
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <script src="scripts/auth.js"></script>
   <script>
     // Show the landing card on page load
     window.addEventListener('load', () => {
@@ -199,6 +230,34 @@
         document.getElementById('result').innerText = 'Please enter valid numbers!';
       }
     }
+
+    // Update menu based on authentication
+    function updateMenu() {
+      const isVendor = sessionStorage.getItem('isVendor');
+      const vendorOnlyItems = document.querySelectorAll('.vendor-only');
+      const authButton = document.getElementById('authButton');
+      
+      if (isVendor) {
+        vendorOnlyItems.forEach(item => item.style.display = 'block');
+        authButton.innerHTML = `
+          <a href="#" onclick="logout()" class="menu-link">
+            <span class="menu-icon">��</span>
+            Logout
+          </a>
+        `;
+      } else {
+        vendorOnlyItems.forEach(item => item.style.display = 'none');
+        authButton.innerHTML = `
+          <a href="vendor-login.html" class="menu-link">
+            <span class="menu-icon">🔒</span>
+            Vendor Login
+          </a>
+        `;
+      }
+    }
+    
+    // Update menu on page load
+    document.addEventListener('DOMContentLoaded', updateMenu);
   </script>
 </body>
 </html>

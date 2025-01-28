@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <!--
@@ -18,7 +17,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Results - Hakikisha Verifier</title>
+    <meta name="description" content="Hakikisha Verifier - Verification Results">
+    <title>Hakikisha Verifier - Verification Results</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 <style>
@@ -214,6 +214,7 @@
      background: linear-gradient(to right, #ff4d4f, #faad14, #52c41a);
      border-radius: 4px;
      outline: none;
+     appearance: none;
      -webkit-appearance: none;
  }
  
@@ -479,179 +480,168 @@
     </div>
 
     <main>
-        <div class="calculator-container">
-            <h2>Cement Verification Calculator</h2>
-<form id="verificationForm">
-    <!-- Brand Verification Section -->
-    <div class="input-group">
-        <label for="manufacturerSelect">Select Manufacturer:</label>
-        <select id="manufacturerSelect" class="form-select" required>
-            <option value="">Choose a manufacturer...</option>
-            <option value="bamburi">Bamburi Cement Limited</option>
-            <option value="mombasa">Mombasa Cement Limited</option>
-            <option value="eapc">East African Portland Cement Company</option>
-            <option value="national">National Cement Company Limited</option>
-            <option value="savannah">Savannah Cement Limited</option>
-            <option value="rai">Rai Cement Limited</option>
-            <option value="karsan">Karsan Ramji & Sons Ltd</option>
-        </select>
+        <h2 class="page-title">Verification Results</h2>
+        <form id="verificationForm" class="needs-validation" novalidate>
+            <!-- Brand Verification Section -->
+            <div class="input-group">
+                <label for="manufacturerSelect">Select Manufacturer:</label>
+                <select id="manufacturerSelect" class="form-select" required>
+                    <option value="">Choose a manufacturer...</option>
+                    <option value="bamburi">Bamburi Cement Limited</option>
+                    <option value="mombasa">Mombasa Cement Limited</option>
+                    <option value="eapc">East African Portland Cement Company</option>
+                    <option value="national">National Cement Company Limited</option>
+                    <option value="savannah">Savannah Cement Limited</option>
+                    <option value="rai">Rai Cement Limited</option>
+                    <option value="karsan">Karsan Ramji & Sons Ltd</option>
+                </select>
 
-        <label for="brandSelect">Select Brand:</label>
-        <select id="brandSelect" class="form-select" required disabled>
-            <option value="">First select a manufacturer...</option>
-        </select>
-    </div>
+                <label for="brandSelect">Select Brand:</label>
+                <select id="brandSelect" class="form-select" required disabled>
+                    <option value="">First select a manufacturer...</option>
+                </select>
+            </div>
 
-    <!-- Location Verification Section -->
-    <div class="input-group">
-        <label for="locationInput">Location Details:</label>
-<select id="countySelect" class="form-select" required>
-    <option value="">Select County...</option>
-    <option value="baringo">Baringo</option>
-    <option value="bomet">Bomet</option>
-    <option value="bungoma">Bungoma</option>
-    <option value="busia">Busia</option>
-    <option value="elgeyo-marakwet">Elgeyo Marakwet</option>
-    <option value="embu">Embu</option>
-    <option value="garissa">Garissa</option>
-    <option value="homa-bay">Homa Bay</option>
-    <option value="isiolo">Isiolo</option>
-    <option value="kajiado">Kajiado</option>
-    <option value="kakamega">Kakamega</option>
-    <option value="kericho">Kericho</option>
-    <option value="kiambu">Kiambu</option>
-    <option value="kilifi">Kilifi</option>
-    <option value="kirinyaga">Kirinyaga</option>
-    <option value="kisii">Kisii</option>
-    <option value="kisumu">Kisumu</option>
-    <option value="kitui">Kitui</option>
-    <option value="kwale">Kwale</option>
-    <option value="laikipia">Laikipia</option>
-    <option value="lamu">Lamu</option>
-    <option value="machakos">Machakos</option>
-    <option value="makueni">Makueni</option>
-    <option value="mandera">Mandera</option>
-    <option value="marsabit">Marsabit</option>
-    <option value="meru">Meru</option>
-    <option value="migori">Migori</option>
-    <option value="mombasa">Mombasa</option>
-    <option value="muranga">Murang'a</option>
-    <option value="nairobi">Nairobi</option>
-    <option value="nakuru">Nakuru</option>
-    <option value="nandi">Nandi</option>
-    <option value="narok">Narok</option>
-    <option value="nyamira">Nyamira</option>
-    <option value="nyandarua">Nyandarua</option>
-    <option value="nyeri">Nyeri</option>
-    <option value="samburu">Samburu</option>
-    <option value="siaya">Siaya</option>
-    <option value="taita-taveta">Taita Taveta</option>
-    <option value="tana-river">Tana River</option>
-    <option value="tharaka-nithi">Tharaka Nithi</option>
-    <option value="trans-nzoia">Trans Nzoia</option>
-    <option value="turkana">Turkana</option>
-    <option value="uasin-gishu">Uasin Gishu</option>
-    <option value="vihiga">Vihiga</option>
-    <option value="wajir">Wajir</option>
-    <option value="west-pokot">West Pokot</option>
-</select>
-        <input type="text" id="specificLocation" placeholder="Enter specific location/town" required>
-    </div>
-    <div class="input-group">
-        <label>Cement Origin:</label>
-        <div class="slider-instruction">Slide or click options to select cement origin</div>
-        <div class="origin-slider-container">
-            <div id="originSlider"></div>
-            <div id="originDescription"></div>
-        </div>
-    </div>
-    <!-- Weight Verification Section -->
-  <div class="input-group">
-      <label>Weight Verification:</label>
-      <input type="number" id="declaredWeight" placeholder="Enter declared weight (kg)" required>
-      <input type="number" id="actualWeight" placeholder="Enter actual weight (kg)" required>
-      <div id="weightResult" class="verification-result"></div>
-  </div>
+            <!-- Location Verification Section -->
+            <div class="input-group">
+                <label for="locationInput">Location Details:</label>
+    <select id="countySelect" class="form-select" required>
+        <option value="">Select County...</option>
+        <option value="baringo">Baringo</option>
+        <option value="bomet">Bomet</option>
+        <option value="bungoma">Bungoma</option>
+        <option value="busia">Busia</option>
+        <option value="elgeyo-marakwet">Elgeyo Marakwet</option>
+        <option value="embu">Embu</option>
+        <option value="garissa">Garissa</option>
+        <option value="homa-bay">Homa Bay</option>
+        <option value="isiolo">Isiolo</option>
+        <option value="kajiado">Kajiado</option>
+        <option value="kakamega">Kakamega</option>
+        <option value="kericho">Kericho</option>
+        <option value="kiambu">Kiambu</option>
+        <option value="kilifi">Kilifi</option>
+        <option value="kirinyaga">Kirinyaga</option>
+        <option value="kisii">Kisii</option>
+        <option value="kisumu">Kisumu</option>
+        <option value="kitui">Kitui</option>
+        <option value="kwale">Kwale</option>
+        <option value="laikipia">Laikipia</option>
+        <option value="lamu">Lamu</option>
+        <option value="machakos">Machakos</option>
+        <option value="makueni">Makueni</option>
+        <option value="mandera">Mandera</option>
+        <option value="marsabit">Marsabit</option>
+        <option value="meru">Meru</option>
+        <option value="migori">Migori</option>
+        <option value="mombasa">Mombasa</option>
+        <option value="muranga">Murang'a</option>
+        <option value="nairobi">Nairobi</option>
+        <option value="nakuru">Nakuru</option>
+        <option value="nandi">Nandi</option>
+        <option value="narok">Narok</option>
+        <option value="nyamira">Nyamira</option>
+        <option value="nyandarua">Nyandarua</option>
+        <option value="nyeri">Nyeri</option>
+        <option value="samburu">Samburu</option>
+        <option value="siaya">Siaya</option>
+        <option value="taita-taveta">Taita Taveta</option>
+        <option value="tana-river">Tana River</option>
+        <option value="tharaka-nithi">Tharaka Nithi</option>
+        <option value="trans-nzoia">Trans Nzoia</option>
+        <option value="turkana">Turkana</option>
+        <option value="uasin-gishu">Uasin Gishu</option>
+        <option value="vihiga">Vihiga</option>
+        <option value="wajir">Wajir</option>
+        <option value="west-pokot">West Pokot</option>
+    </select>
+                <input type="text" id="specificLocation" placeholder="Enter specific location/town" required>
+            </div>
+            <div class="input-group">
+                <label>Cement Origin:</label>
+                <div class="slider-instruction">Slide or click options to select cement origin</div>
+                <div class="origin-slider-container">
+                    <div id="originSlider"></div>
+                    <div id="originDescription"></div>
+                </div>
+            </div>
+            <!-- Weight Verification Section -->
+          <div class="input-group">
+              <label>Weight Verification:</label>
+              <input type="number" id="declaredWeight" placeholder="Enter declared weight (kg)" required>
+              <input type="number" id="actualWeight" placeholder="Enter actual weight (kg)" required>
+              <div id="weightResult" class="verification-result"></div>
+          </div>
 
-    <!-- Strength Verification Section -->
-    <div class="input-group">
-        <label>Strength Class:</label>
-        <select id="strengthClass" class="form-select" required>
-            <option value="">Select strength class...</option>
-            <option value="32.5">32.5 (Residential)</option>
-            <option value="42.5">42.5 (Commercial)</option>
-            <option value="52.5">52.5 (Heavy Infrastructure)</option>
-        </select>
-        <label>Intended Use:</label>
-        <select id="intendedUse" class="form-select" required>
-            <option value="">Select intended use...</option>
-            <option value="residential">Residential Construction</option>
-            <option value="commercial">Commercial Building</option>
-            <option value="infrastructure">Infrastructure Project</option>
-        </select>
-    </div>
+            <!-- Strength Verification Section -->
+            <div class="input-group">
+                <label>Strength Class:</label>
+                <select id="strengthClass" class="form-select" required>
+                    <option value="">Select strength class...</option>
+                    <option value="32.5">32.5 (Residential)</option>
+                    <option value="42.5">42.5 (Commercial)</option>
+                    <option value="52.5">52.5 (Heavy Infrastructure)</option>
+                </select>
+                <label>Intended Use:</label>
+                <select id="intendedUse" class="form-select" required>
+                    <option value="">Select intended use...</option>
+                    <option value="residential">Residential Construction</option>
+                    <option value="commercial">Commercial Building</option>
+                    <option value="infrastructure">Infrastructure Project</option>
+                </select>
+            </div>
 
-<!-- KEBS Verification Section -->
-<div class="input-group">
-    <label>KEBS Verification:</label>
-    <div class="radio-group">
-        <label>KEBS Sticker Present:</label>
-        <div>
-            <div class="radio-option">
-                <input type="radio" id="kebsYes" name="kebsPresent" value="yes" required>
-                <label for="kebsYes">Yes</label>
+    <!-- KEBS Verification Section -->
+    <div class="input-group">
+        <label>KEBS Verification:</label>
+        <div class="radio-group">
+            <label>KEBS Sticker Present:</label>
+            <div>
+                <div class="radio-option">
+                    <input type="radio" id="kebsYes" name="kebsPresent" value="yes" required>
+                    <label for="kebsYes">Yes</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="kebsNo" name="kebsPresent" value="no" required>
+                    <label for="kebsNo">No</label>
+                </div>
             </div>
-            <div class="radio-option">
-                <input type="radio" id="kebsNo" name="kebsPresent" value="no" required>
-                <label for="kebsNo">No</label>
+        </div>
+        <div class="radio-group">
+            <label>Sticker Condition:</label>
+            <div>
+                <div class="radio-option">
+                    <input type="radio" id="stickerIntact" name="stickerCondition" value="intact" required>
+                    <label for="stickerIntact">Intact</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="stickerTampered" name="stickerCondition" value="tampered" required>
+                    <label for="stickerTampered">Tampered</label>
+                </div>
             </div>
         </div>
     </div>
-    <div class="radio-group">
-        <label>Sticker Condition:</label>
-        <div>
-            <div class="radio-option">
-                <input type="radio" id="stickerIntact" name="stickerCondition" value="intact" required>
-                <label for="stickerIntact">Intact</label>
+    <!-- Date Verification Section -->
+    <div class="input-group">
+        <label>Manufacturing Date:</label>
+        <input type="date" id="manufactureDate" required>
+        <label>Storage Conditions:</label>
+        <div class="storage-slider-container">
+            <input type="range" id="storageCondition" min="0" max="3" step="1" value="0">
+            <div class="slider-labels">
+                <span>Poor</span>
+                <span>Fair</span>
+                <span>Good</span>
+                <span>Excellent</span>
             </div>
-            <div class="radio-option">
-                <input type="radio" id="stickerTampered" name="stickerCondition" value="tampered" required>
-                <label for="stickerTampered">Tampered</label>
-            </div>
+            <div id="storageDescription" class="storage-description"></div>
         </div>
     </div>
-</div>
-<!-- Date Verification Section -->
-<div class="input-group">
-    <label>Manufacturing Date:</label>
-    <input type="date" id="manufactureDate" required>
-    <label>Storage Conditions:</label>
-    <div class="storage-slider-container">
-        <input type="range" id="storageCondition" min="0" max="3" step="1" value="0">
-        <div class="slider-labels">
-            <span>Poor</span>
-            <span>Fair</span>
-            <span>Good</span>
-            <span>Excellent</span>
-        </div>
-        <div id="storageDescription" class="storage-description"></div>
-    </div>
-</div>
-    <button type="submit" class="calculate-btn">Verify Cement Product</button>
-</form>
-            <div class="results-display" id="resultsDisplay">
-                <h3>Verification Results</h3>
-                <div class="result-item" id="overallScore"></div>
-                <div class="result-item" id="brandResult"></div>
-                <div class="result-item" id="locationResult"></div>
-                <div class="result-item" id="weightResult"></div>
-                <div class="result-item" id="strengthResult"></div>
-                <div class="result-item" id="kebsResult"></div>
-                <div class="result-item" id="dateResult"></div>
-                <div class="result-item" id="recommendation"></div>
+            <div class="d-grid gap-2 mt-4">
+                <button class="btn btn-primary btn-lg" type="submit">Verify Cement Product</button>
             </div>
-        </div>
-        <div id="resultsDisplay" class="results-display">
+        </form>
+        <div class="results-display" id="resultsDisplay" aria-live="polite">
             <h3>Verification Results</h3>
             <div class="result-item" id="overallScore"></div>
             <div class="result-item" id="brandResult"></div>
@@ -905,7 +895,8 @@ function getRecommendation(score) {
     
     declaredWeightInput.addEventListener('input', calculateWeightVerification);
     actualWeightInput.addEventListener('input', calculateWeightVerification);
-    <!-- Add this JavaScript at the end of your <script> section -->
+</script>
+
 <script>
     // Highlight current page in menu
     document.addEventListener('DOMContentLoaded', function() {
@@ -921,6 +912,7 @@ function getRecommendation(score) {
         });
     });
 </script>
+
 <script>
     // Origin slider initialization
     document.addEventListener('DOMContentLoaded', function() {
@@ -968,85 +960,23 @@ function getRecommendation(score) {
         }
     });
 </script>
+
 <script>
-    // Brand selection functionality
-    const brandOptions = {
-        bamburi: ['Nguvu', 'Duracem', 'Powerplus'],
-        mombasa: ['Nyumba', 'Power Plus', 'Mukwano'],
-        eapc: ['Blue Triangle', 'EAPC Plus'],
-        national: ['Simba Cement', 'Nyati'],
-        savannah: ['Savannah Premium', 'Savannah Plus'],
-        rai: ['Rai Cement'],
-        karsan: ['Ndovu Cement']
-    };
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const manufacturerSelect = document.getElementById('manufacturerSelect');
-        const brandSelect = document.getElementById('brandSelect');
-
-        manufacturerSelect.addEventListener('change', function() {
-            // Clear existing options
-            brandSelect.innerHTML = '';
-            
-            if (this.value) {
-                // Enable brand select
-                brandSelect.disabled = false;
-                
-                // Add default option
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = 'Select a brand...';
-                brandSelect.appendChild(defaultOption);
-                
-                // Add brand options for selected manufacturer
-                const brands = brandOptions[this.value] || [];
-                brands.forEach(brand => {
-                    const option = document.createElement('option');
-                    option.value = brand.toLowerCase().replace(/\s+/g, '-');
-                    option.textContent = brand;
-                    brandSelect.appendChild(option);
-                });
-            } else {
-                // Disable and reset brand select if no manufacturer selected
-                brandSelect.disabled = true;
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = 'First select a manufacturer...';
-                brandSelect.appendChild(defaultOption);
-            }
-        });
-    });
-    const form = document.getElementById('verificationForm');
-    const resultsDisplay = document.getElementById('resultsDisplay');
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const scores = calculateScores();
-        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
-        
-        document.getElementById('overallScore').innerHTML = `<strong>Overall Score:</strong> ${totalScore}/100`;
-        document.getElementById('brandResult').innerHTML = `<strong>Brand Verification:</strong> ${scores.brand}/20`;
-        document.getElementById('locationResult').innerHTML = `<strong>Location Verification:</strong> ${scores.location}/20`;
-        document.getElementById('weightResult').innerHTML = `<strong>Weight Verification:</strong> ${scores.weight}/15`;
-        document.getElementById('strengthResult').innerHTML = `<strong>Strength Verification:</strong> ${scores.strength}/15`;
-        document.getElementById('kebsResult').innerHTML = `<strong>KEBS Verification:</strong> ${scores.kebs}/20`;
-        document.getElementById('dateResult').innerHTML = `<strong>Date Verification:</strong> ${scores.date}/10`;
-        document.getElementById('recommendation').innerHTML = getRecommendation(totalScore);
-        
-        resultsDisplay.classList.add('show');
-        resultsDisplay.scrollIntoView({ behavior: 'smooth' });
-    });
-    
-    function getRecommendation(score) {
-        if (score >= 90) {
-            return '<span style="color: #28a745;">✓ This cement product appears to be authentic and safe to use.</span>';
-        } else if (score >= 70) {
-            return '<span style="color: #ffc107;">⚠ This cement product shows some signs of concern. Verify with the manufacturer.</span>';
-        } else {
-            return '<span style="color: #dc3545;">⚠ Warning: This cement product shows significant signs of potential counterfeiting. Do not use.</span>';
-        }
-    }
+    // Form validation
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })();
 </script>
 </body>
 </html>

@@ -223,43 +223,43 @@
     <main>
         <h2 class="page-title">Cement Verification Criteria</h2>
         
-<div class="verification-grid">
-    <div class="verification-item" role="button" tabindex="0">
-        <img src="images/brand.jpg" alt="Brand Verification">
-        <h3>Brand Verification</h3>
-        <p>Validate manufacturer: Bamburi, Nyumba, Simba Cement</p>
-    </div>
-    
-    <div class="verification-item" role="button" tabindex="0">
-        <img src="images/location.jpg" alt="Location Verification">
-        <h3>Location Verification</h3>
-        <p>Track purchase location and distribution path</p>
-    </div>
-    
-    <div class="verification-item" role="button" tabindex="0">
-        <img src="images/weight.jpg" alt="Weight Verification">
-        <h3>Weight Verification</h3>
-        <p>Standard weight check: 50kg ± tolerance</p>
-    </div>
-    
-    <div class="verification-item" role="button" tabindex="0">
-        <img src="images/strength.jpg" alt="Strength Classification">
-        <h3>Strength & Purpose</h3>
-        <p>Classes: 32.5, 42.5, 52.5 and intended use</p>
-    </div>
-    
-    <div class="verification-item" role="button" tabindex="0">
-        <img src="images/kebs.jpg" alt="KEBS Verification">
-        <h3>KEBS Verification</h3>
-        <p>Verify KEBS sticker code and batch number</p>
-    </div>
-    
-    <div class="verification-item" role="button" tabindex="0">
-        <img src="images/date.jpg" alt="Date Verification">
-        <h3>Date Verification</h3>
-        <p>Check manufacture date and 3-month shelf life</p>
-    </div>
-</div>
+        <div class="verification-grid">
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/brand.jpg" alt="Brand Verification">
+                <h3>Brand Verification</h3>
+                <p>Validate manufacturer: Bamburi, Nyumba, Simba Cement</p>
+            </div>
+            
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/location.jpg" alt="Location Verification">
+                <h3>Location Verification</h3>
+                <p>Track purchase location and distribution path</p>
+            </div>
+            
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/weight.jpg" alt="Weight Verification">
+                <h3>Weight Verification</h3>
+                <p>Standard weight check: 50kg ± tolerance</p>
+            </div>
+            
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/strength.jpg" alt="Strength Classification">
+                <h3>Strength & Purpose</h3>
+                <p>Classes: 32.5, 42.5, 52.5 and intended use</p>
+            </div>
+            
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/kebs.jpg" alt="KEBS Verification">
+                <h3>KEBS Verification</h3>
+                <p>Verify KEBS sticker code and batch number</p>
+            </div>
+            
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/date.jpg" alt="Date Verification">
+                <h3>Date Verification</h3>
+                <p>Check manufacture date and 3-month shelf life</p>
+            </div>
+        </div>
     </main>
     
     <script>
@@ -282,12 +282,12 @@
             });
         });
 
-function handleVerification(item) {
-    const documentType = item.querySelector('h3').textContent;
-    // Store the verification type in sessionStorage to use it in results page
-    sessionStorage.setItem('verificationType', documentType);
-    window.location.href = 'results.html';
-}
+        function handleVerification(item) {
+            const documentType = item.querySelector('h3').textContent;
+            // Store the verification type in sessionStorage to use it in results page
+            sessionStorage.setItem('verificationType', documentType);
+            window.location.href = 'results.html';
+        }
     </script>
 </body>
 </html>
