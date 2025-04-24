@@ -48,7 +48,11 @@ const authMiddleware = require('./middleware/auth');
 const app = express();
 const httpServer = http.createServer(app);
 
-app.use(cors());
+app.use(cors({
+    origin: '*',  // For development - change this to your frontend URL later
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
 app.use(express.json());
 
 // Serve static files first
@@ -131,13 +135,6 @@ app.get('/test', (req, res) => {
 app.get('/', (req, res) => {
     res.send('🔥 Hakikisha API is running...');
 });
-
-app.use(cors({
-    origin: 'http://localhost:5500',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
 
 // Enhanced error handler
 app.use((err, req, res, next) => {
