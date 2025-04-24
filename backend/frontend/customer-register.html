@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakikisha - Customer Registration</title>
+    <style>
+        :root {
+            --primary-color: #0070f3;
+            --secondary-color: #0099ff;
+            --background-color: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--background-color) 0%, #ffffff 100%);
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            width: 120px;
+            display: block;
+            margin: 0 auto 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+        }
+
+        .register-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            grid-column: 1 / -1;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 1.5rem;
+            grid-column: 1 / -1;
+        }
+
+        .links a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            display: none;
+            color: #28a745;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            background: rgba(40, 167, 69, 0.1);
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <img src="images/hakikisha-verifier-logo.png" alt="Hakikisha Logo" class="logo">
+        <h1>Create Customer Account</h1>
+        <form id="customerRegisterForm" class="form-grid">
+            <div class="input-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Name" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="Phone" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Password" required minlength="8" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}" oninvalid="this.setCustomValidity('Password must be at least 8 characters long and include letters, numbers, and symbols.')" oninput="this.setCustomValidity('')">
+                <label>
+                    <input type="checkbox" onclick="togglePasswordVisibility('password')"> Show Password
+                </label>
+            </div>
+            <div id="passwordError" style="color:red;"></div>
+            <div class="input-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" required>
+                <label>
+                    <input type="checkbox" onclick="togglePasswordVisibility('confirmPassword')"> Show Password
+                </label>
+            </div>
+            <div class="input-group full-width">
+                <label for="address">Delivery Address</label>
+                <input type="text" id="address" placeholder="Address" required>
+            </div>
+            <button type="submit" class="register-btn">Create Account</button>
+            <p class="success-message" id="successMessage">Account created successfully!</p>
+            <div class="links">
+                Already have an account? <a href="customer-login.html">Login</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function togglePasswordVisibility(id) {
+            var x = document.getElementById(id);
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+
+        document.getElementById('customerRegisterForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const address = document.getElementById('address').value;
+            const role = 'customer';
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, phone, password, address, role })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = 'customer-login.html';
+                    }, 1000);
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Registration failed. Please try again.');
+            }
+        });
+
+        window.onbeforeunload = function() {
+            return 'Are you sure you want to leave?';
+        };
+    </script>
+</body>
+</html>

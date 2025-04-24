@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakikisha - Welcome</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1d4ed8;
+            --accent-color: #00a3ff;
+            --background-light: #f9f9f9;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--background-light) 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            width: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/cement-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* User Type Selection */
+        .user-selection {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: -50px auto 50px;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            animation: slideUp 0.5s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .user-card p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .user-card img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 112, 243, 0.2);
+        }
+
+        .secondary-button {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .hidden-admin-login {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 50px 20px;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-logo {
+            width: 180px;
+            height: auto;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .card-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .user-card:hover .card-logo {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <img src="images/hakikisha-verifier-logo.png" alt="Hakikisha Verifier" class="main-logo">
+            <h1>Welcome to Hakikisha</h1>
+            <p>Your trusted platform for cement product verification and management</p>
+        </div>
+    </section>
+
+    <!-- User Type Selection -->
+    <div class="user-selection">
+        <div class="user-card">
+            <img src="images/hakikisha-verifier-logo.png" alt="Hakikisha Logo" class="card-logo">
+            <h2>I'm a Customer</h2>
+            <p>Verify products, place orders, and track deliveries</p>
+            <a href="customer-login.html" class="cta-button">Customer Login</a>
+            <p>New user? <a href="customer-register.html">Register here</a></p>
+        </div>
+
+        <div class="user-card">
+            <img src="images/hakikisha-verifier-logo.png" alt="Hakikisha Logo" class="card-logo">
+            <h2>I'm a Vendor</h2>
+            <p>Manage products, handle orders, and grow your business</p>
+            <a href="vendor-login.html" class="cta-button">Vendor Login</a>
+            <p>New vendor? <a href="vendor-signup.html">Register here</a></p>
+        </div>
+
+        <div class="user-card">
+            <img src="images/hakikisha-verifier-logo.png" alt="Hakikisha Logo" class="card-logo">
+            <h2>I'm an Admin</h2>
+            <p>Manage users, products, and orders</p>
+            <a href="admin-login.html" class="hidden-admin-login">Admin Login</a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Verification</h3>
+                <p>Ensure product authenticity with our advanced verification system</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>Order Management</h3>
+                <p>Streamlined ordering process for both customers and vendors</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Real-time Analytics</h3>
+                <p>Track performance and make data-driven decisions</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

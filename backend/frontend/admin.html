@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakikisha - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FF9800;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --header-color: #fff;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--background-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--header-color);
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .main-content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #e68900;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav li {
+            margin: 15px 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="admin-info">
+                <div class="admin-avatar" id="adminInitials">A</div>
+                <h2>Admin Dashboard</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#remove-user">Remove User</a></li>
+                    <li><a href="#vendor-ratings">Vendor Ratings</a></li>
+                    <li><a href="#verification-info">Verification Info</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Admin Dashboard</h1>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+            <div id="adminContent">
+                <section id="remove-user">
+                    <h2>Remove User</h2>
+                    <input type="text" id="userId" placeholder="Enter User ID">
+                    <button onclick="removeUser()">Remove User</button>
+                </section>
+                <section id="vendor-ratings">
+                    <h2>Vendor Ratings</h2>
+                    <button onclick="fetchVendorRatings()">Fetch Ratings</button>
+                    <div id="ratingsDisplay"></div>
+                </section>
+                <section id="verification-info">
+                    <h2>Verification Information</h2>
+                    <button onclick="fetchVerificationInfo()">Fetch Verification Info</button>
+                    <div id="verificationDisplay"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script src="admin.js"></script>
+    <script>
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('adminToken');
+                window.location.href = 'landing.html';
+            }
+        }
+    </script>
+    <script>
+        function loadAdminData() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                    console.log(data);
+                }
+            };
+            xhttp.open("GET", "/api/admin-data", true);
+            xhttp.send();
+        }
+
+        // Call the function on page load
+        document.addEventListener('DOMContentLoaded', loadAdminData);
+    </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hakikisha Vendor Signup">
+    <title>Hakikisha - Vendor Signup</title>
+    <link rel="stylesheet" href="/styles/animations.css">
+    <!-- Include Font Awesome for icon toggles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0070f3;
+            --primary-hover: #005bb5;
+            --background-light: #f9f9f9;
+            --text-dark: #333;
+        }
+
+        body {
+            background: var(--background-light);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .signup-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .signup-container h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.1);
+            background: #fff;
+        }
+
+        /* Password toggle styling */
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(45deg, var(--primary-color), #1a8cff);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 112, 243, 0.2);
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Vendor Signup</h1>
+        <form id="vendorRegisterForm">
+            <div class="form-group">
+                <label for="businessName">Business Name</label>
+                <input type="text" id="businessName" placeholder="Enter Business Name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter Email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" placeholder="Enter Phone Number" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Business Address</label>
+                <input type="text" id="address" placeholder="Enter Address" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter Password" required>
+                <i class="password-toggle fas fa-eye" onclick="togglePassword('password')"></i>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                <i class="password-toggle fas fa-eye" onclick="togglePassword('confirmPassword')"></i>
+                <div id="passwordMatch" class="error-message"></div>
+            </div>
+            <button type="submit" class="submit-btn">Sign Up</button>
+        </form>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Check password match in real time
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const messageDiv = document.getElementById('passwordMatch');
+            if (!confirmPassword) {
+                messageDiv.textContent = "";
+                return;
+            }
+            if (password === confirmPassword) {
+                messageDiv.textContent = "✓ Passwords match";
+                messageDiv.style.color = "#28a745";
+            } else {
+                messageDiv.textContent = "✗ Passwords do not match";
+                messageDiv.style.color = "#dc3545";
+            }
+        }
+
+        document.getElementById('password').addEventListener('input', checkPasswordMatch);
+        document.getElementById('confirmPassword').addEventListener('input', checkPasswordMatch);
+
+        // Form submission handler
+        document.getElementById('vendorRegisterForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const businessName = document.getElementById('businessName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            // Create vendor registration data object
+            const vendorData = {
+                businessName,
+                email,
+                phone,
+                address,
+                password,
+                role: 'vendor'
+            };
+
+            try {
+                // Send registration request to the backend
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(vendorData)
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Registration failed');
+                }
+                
+                // Assuming successful registration returns token and vendor information
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userName', data.user.businessName);
+                localStorage.setItem('userRole', data.user.role);
+                
+                alert('Registration successful!');
+                // Redirect to vendor dashboard (or login, if that is desired)
+                window.location.href = 'vendor-dashboard.html';
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert(error.message);
+            }
+        });
+    </script>
+</body>
+</html>

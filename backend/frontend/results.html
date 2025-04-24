@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--
+    This is the head section of the HTML document. It contains metadata and
+    CSS styles for the page. The metadata includes the character encoding,
+    viewport settings, and the page title. The CSS styles define the layout
+    and visual appearance of the page, including the colors, fonts, and
+    padding/margin settings.
+
+    The styles for the navigation bar, main content area, and calculator
+    container are defined here. The styles for the verification form elements
+    are also defined here.
+
+    The media query for mobile devices is also defined here, which hides the
+    navigation links and reduces the padding on the main content area.
+  -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hakikisha Verifier - Verification Results">
+    <title>Hakikisha Verifier - Verification Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+<style>
+        :root {
+            --primary-color: #0070f3;
+            --secondary-color: #0366d6;
+            --background-color: #f5f5f5;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            background-image: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), url('images/modern-bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .nav-container {
+            background: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .calculator-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .input-group input,
+        .input-group select,
+        .form-select {
+            border: 2px solid #eee;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .calculate-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .results-display {
+            margin-top: 2rem;
+            padding: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .results-display.show {
+            display: block;
+        }
+
+        .result-item {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background-color: var(--background-color);
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+        }
+
+        /* New styles for verification form elements */
+        .checkbox-group {
+            margin: 10px 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="number"],
+        .input-group input[type="date"] {
+            margin-bottom: 10px;
+        }
+
+        .form-select:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .input-group label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        #specificLocation {
+            margin-top: 10px;
+            width: 100%;
+        }
+ /* Storage Slider Styles */
+ .storage-slider-container {
+     margin: 15px 0;
+     padding: 10px;
+     background: linear-gradient(145deg, #f6f6f6, #ffffff);
+     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+     border-radius: 8px;
+ }
+ 
+ input[type="range"] {
+     width: 100%;
+     height: 10px;
+     border-radius: 5px;
+     background: linear-gradient(90deg, #ff4d4f 0%, #faad14 50%, #52c41a 100%);
+     outline: none;
+     appearance: none;
+     -webkit-appearance: none;
+ }
+ 
+ input[type="range"]::-webkit-slider-thumb {
+     -webkit-appearance: none;
+     width: 20px;
+     height: 20px;
+     background: white;
+     border: 2px solid #1890ff;
+     border-radius: 50%;
+     cursor: pointer;
+     transition: transform 0.2s ease;
+     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+ }
+ 
+ input[type="range"]::-webkit-slider-thumb:hover {
+     transform: scale(1.2);
+ }
+ 
+ .slider-labels {
+     display: flex;
+     justify-content: space-between;
+     margin-top: 8px;
+     color: #666;
+     font-size: 0.9em;
+ }
+ 
+ .storage-description {
+     margin-top: 10px;
+     padding: 8px;
+     border-radius: 4px;
+     text-align: center;
+     font-weight: 500;
+     transition: all 0.3s;
+ }       
+/* Origin Slider Styles */
+.origin-slider-container {
+    margin: 20px 0;
+    padding: 20px 0;
+}
+
+#originSlider {
+    height: 18px;  /* Increased height to accommodate handle */
+    margin: 20px 0;
+    border-radius: 0;
+    padding-top: 20px;
+}
+
+#originSlider .noUi-connect {
+    background: var(--primary-color);
+}
+
+#originSlider .noUi-handle {
+    width: 18px;
+    height: 18px;
+    border-radius: 0;
+    background: #2980b9;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    cursor: pointer;
+    top: 0;  /* Changed to align with track */
+    right: -9px;
+}
+
+#originSlider .noUi-handle:before,
+#originSlider .noUi-handle:after {
+    display: none;  /* Remove default lines in handle */
+}
+
+#originDescription {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Add these new styles to fix the overlapping */
+#originSlider .noUi-pips {
+    padding-top: 5px;
+}
+
+#originSlider .noUi-value {
+    font-size: 12px;
+    padding-top: 15px;
+    white-space: nowrap;
+}
+
+#originSlider .noUi-marker {
+    margin-top: 5px;
+}
+
+/* Slider instruction text */
+.slider-instruction {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+/* Weight Verification Styles */
+.verification-result {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    background-color: #f8f9fa;
+}
+
+#weightResult {
+    margin-top: 10px;
+    font-size: 14px;
+}
+   /* Menu Styles */
+   .menu-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 15px 0;
+        margin-bottom: 30px;
+    }
+
+    .menu {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+    }
+
+    .menu-item {
+        position: relative;
+    }
+
+    .menu-link {
+        color: #333;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .menu-link:hover {
+        color: var(--primary-color);
+    }
+
+    .menu-link.active {
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .menu-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--primary-color);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .menu-link:hover::after {
+        width: 100%;
+    }
+
+    .menu-link.active::after {
+        width: 100%;
+    }
+
+    .menu-icon {
+        font-size: 18px;
+    }
+
+    /* Responsive Menu */
+    @media (max-width: 768px) {
+        .menu {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-link {
+            padding: 8px 15px;
+        }
+    }
+.radio-group {
+    margin: 10px 0;
+}
+
+.radio-group label {
+    margin-right: 15px;
+}
+
+.radio-group div {
+    margin-top: 5px;
+    display: grid;  /* Change to grid */
+    grid-template-columns: auto 1fr;  /* Two columns: radio+label pairs */
+    gap: 40px;  /* Space between options */
+    align-items: center;
+}
+
+.radio-group input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.radio-group input[type="radio"]:checked {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+}
+
+.radio-group input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+/* Add these for the radio button wrapper */
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;  /* Space between radio and its label */
+}
+.results-display {
+    display: none;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    border-left: 4px solid var(--primary-color);
+    animation: slideIn 0.5s ease;
+}
+
+.results-display.show {
+    display: block;
+}
+
+.result-item {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.result-item:hover {
+    border-left-color: var(--primary-color);
+    background: rgba(0, 112, 243, 0.05);
+}
+
+/* Enhanced buttons */
+.btn {
+    background: linear-gradient(45deg, var(--primary-color), #0099ff);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 112, 243, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 112, 243, 0.3);
+}
+
+/* Loading states */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}
+
+/* Enhanced typography */
+.page-title {
+    background: linear-gradient(45deg, var(--primary-color), #0099ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    background-clip: border-box; /* Standard syntax */
+    -webkit-background-clip: border-box; /* Safari */
+    -moz-background-clip: border-box; /* Firefox */
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .calculator-container {
+        background: rgba(255, 255, 255, 0.98);
+    }
+    
+    .input-group input,
+    .input-group select,
+    .form-select {
+        background: rgba(255, 255, 255, 0.95);
+    }
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .calculator-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .btn {
+        padding: 0.8rem 1.5rem;
+    }
+}
+
+/* Enhanced button styling */
+.btn-primary.btn-lg {
+    background: linear-gradient(45deg, #0070f3, #00a3ff);
+    color: white;
+    font-size: 1.2rem;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 112, 243, 0.3);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-top: 2rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary.btn-lg:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 112, 243, 0.4);
+    background: linear-gradient(45deg, #005cc5, #0070f3);
+}
+
+.btn-primary.btn-lg:active {
+    transform: translateY(1px);
+}
+
+/* Shine effect for button */
+.btn-primary.btn-lg::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    transition: all 0.3s ease;
+}
+
+.btn-primary.btn-lg:hover::after {
+    animation: shine 1.5s ease;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* Replace slider with modern radio buttons for cement origin */
+.origin-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.origin-option {
+    position: relative;
+    padding: 1.5rem;
+    background: white;
+    border: 2px solid #e1e1e1;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.origin-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.origin-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.origin-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+}
+
+.origin-option .icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.origin-option input[type="radio"]:checked + label {
+    color: var(--primary-color);
+}
+
+.origin-option input[type="radio"]:checked + label .icon {
+    transform: scale(1.1);
+}
+
+.origin-option input[type="radio"]:checked ~ .check-mark {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.origin-option .check-mark {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.origin-option .check-mark::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.origin-option input[type="radio"]:checked ~ .origin-option {
+    border-color: var(--primary-color);
+    background: rgba(0, 112, 243, 0.05);
+}
+
+/* Add this style for the button group */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-order {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    font-size: 1.1rem;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    flex: 1;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-order:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    background: linear-gradient(45deg, #218838, #1e7e34);
+    color: white;
+    text-decoration: none;
+}
+
+/* Add these styles in your existing style section */
+.auth-error {
+    text-align: center;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.auth-error h2 {
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.auth-error .btn {
+    margin-top: 1rem;
+    padding: 0.5rem 2rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.auth-error .btn:hover {
+    background: var(--secondary-color); /* Fixed typo from --primary-hover */
+}
+</style>
+    
+</head>
+<body>
+    <div id="debugInfo" style="display: none; padding: 10px; background: #f0f0f0; margin: 10px;">
+        <h3>Debug Information</h3>
+        <pre id="authDebug"></pre>
+    </div>
+    <div class="menu-container">
+        <ul class="menu">
+            <li class="menu-item">
+                <a href="index.html" class="menu-link">
+                    <span class="menu-icon">🏠</span>
+                    Home
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="Verify.html" class="menu-link">
+                    <span class="menu-icon">✓</span>
+                    Verify
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="results.html" class="menu-link active">
+                    <span class="menu-icon">📊</span>
+                    Results
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="orders.html" class="menu-link">
+                    <span class="menu-icon">📦</span>
+                    Orders
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="vendors.html" class="menu-link">
+                    <span class="menu-icon">👥</span>
+                    Vendors
+                </a>
+            </li>
+        </ul>
+    </div>    
+    <div class="nav-container">
+        <nav>
+            <div class="logo">
+                <h1>Hakikisha Verifier</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Verify.html">Verify</a></li>
+                <li><a href="results.html" class="active">Results</a></li>
+                <li><a href="vendors.html">Cement Vendors</a></li>
+                <li><a href="orders.html">Order Cement</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2 class="page-title">Verification Results</h2>
+        <form id="verificationForm" class="needs-validation" novalidate>
+            <!-- Brand Verification Section -->
+            <div class="input-group">
+                <label for="manufacturerSelect">Select Manufacturer:</label>
+                <select id="manufacturerSelect" class="form-select" required>
+                    <option value="">Choose a manufacturer...</option>
+                    <option value="bamburi">Bamburi Cement Limited</option>
+                    <option value="mombasa">Mombasa Cement Limited</option>
+                    <option value="eapc">East African Portland Cement Company</option>
+                    <option value="national">National Cement Company Limited</option>
+                    <option value="savannah">Savannah Cement Limited</option>
+                    <option value="rai">Rai Cement Limited</option>
+                    <option value="karsan">Karsan Ramji & Sons Ltd</option>
+                </select>
+
+                <label for="brandSelect">Select Brand:</label>
+                <select id="brandSelect" class="form-select" required disabled>
+                    <option value="">First select a manufacturer...</option>
+                </select>
+            </div>
+
+            <!-- Location Verification Section -->
+            <div class="input-group">
+                <label for="locationInput">Location Details:</label>
+    <select id="countySelect" class="form-select" required>
+        <option value="">Select County...</option>
+        <option value="baringo">Baringo</option>
+        <option value="bomet">Bomet</option>
+        <option value="bungoma">Bungoma</option>
+        <option value="busia">Busia</option>
+        <option value="elgeyo-marakwet">Elgeyo Marakwet</option>
+        <option value="embu">Embu</option>
+        <option value="garissa">Garissa</option>
+        <option value="homa-bay">Homa Bay</option>
+        <option value="isiolo">Isiolo</option>
+        <option value="kajiado">Kajiado</option>
+        <option value="kakamega">Kakamega</option>
+        <option value="kericho">Kericho</option>
+        <option value="kiambu">Kiambu</option>
+        <option value="kilifi">Kilifi</option>
+        <option value="kirinyaga">Kirinyaga</option>
+        <option value="kisii">Kisii</option>
+        <option value="kisumu">Kisumu</option>
+        <option value="kitui">Kitui</option>
+        <option value="kwale">Kwale</option>
+        <option value="laikipia">Laikipia</option>
+        <option value="lamu">Lamu</option>
+        <option value="machakos">Machakos</option>
+        <option value="makueni">Makueni</option>
+        <option value="mandera">Mandera</option>
+        <option value="marsabit">Marsabit</option>
+        <option value="meru">Meru</option>
+        <option value="migori">Migori</option>
+        <option value="mombasa">Mombasa</option>
+        <option value="muranga">Murang'a</option>
+        <option value="nairobi">Nairobi</option>
+        <option value="nakuru">Nakuru</option>
+        <option value="nandi">Nandi</option>
+        <option value="narok">Narok</option>
+        <option value="nyamira">Nyamira</option>
+        <option value="nyandarua">Nyandarua</option>
+        <option value="nyeri">Nyeri</option>
+        <option value="samburu">Samburu</option>
+        <option value="siaya">Siaya</option>
+        <option value="taita-taveta">Taita Taveta</option>
+        <option value="tana-river">Tana River</option>
+        <option value="tharaka-nithi">Tharaka Nithi</option>
+        <option value="trans-nzoia">Trans Nzoia</option>
+        <option value="turkana">Turkana</option>
+        <option value="uasin-gishu">Uasin Gishu</option>
+        <option value="vihiga">Vihiga</option>
+        <option value="wajir">Wajir</option>
+        <option value="west-pokot">West Pokot</option>
+    </select>
+                <input type="text" id="specificLocation" placeholder="Enter specific location/town" required>
+            </div>
+            <div class="input-group">
+                <label>Cement Origin:</label>
+                <div class="origin-options">
+                    <div class="origin-option">
+                        <input type="radio" id="factory" name="origin" value="factory">
+                        <label for="factory">
+                            <span class="icon">🏭</span>
+                            From Factory
+                        </label>
+                        <div class="check-mark"></div>
+                    </div>
+                    <div class="origin-option">
+                        <input type="radio" id="dealer" name="origin" value="dealer">
+                        <label for="dealer">
+                            <span class="icon">🏪</span>
+                            Authorized Dealer
+                        </label>
+                        <div class="check-mark"></div>
+                    </div>
+                    <div class="origin-option">
+                        <input type="radio" id="retailer" name="origin" value="retailer">
+                        <label for="retailer">
+                            <span class="icon">🏬</span>
+                            From Retailer
+                        </label>
+                        <div class="check-mark"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Weight Verification Section -->
+          <div class="input-group">
+              <label>Weight Verification:</label>
+              <input type="number" id="declaredWeight" placeholder="Enter declared weight (kg)" required>
+              <input type="number" id="actualWeight" placeholder="Enter actual weight (kg)" required>
+              <div id="weightResult" class="verification-result"></div>
+          </div>
+
+            <!-- Strength Verification Section -->
+            <div class="input-group">
+                <label>Strength Class:</label>
+                <select id="strengthClass" class="form-select" required>
+                    <option value="">Select strength class...</option>
+                    <option value="32.5">32.5 (Residential)</option>
+                    <option value="42.5">42.5 (Commercial)</option>
+                    <option value="52.5">52.5 (Heavy Infrastructure)</option>
+                </select>
+                <label>Intended Use:</label>
+                <select id="intendedUse" class="form-select" required>
+                    <option value="">Select intended use...</option>
+                    <option value="residential">Residential Construction</option>
+                    <option value="commercial">Commercial Building</option>
+                    <option value="infrastructure">Infrastructure Project</option>
+                </select>
+            </div>
+
+    <!-- KEBS Verification Section -->
+    <div class="input-group">
+        <label>KEBS Verification:</label>
+        <div class="radio-group">
+            <label>KEBS Sticker Present:</label>
+            <div>
+                <div class="radio-option">
+                    <input type="radio" id="kebsYes" name="kebsPresent" value="yes" required>
+                    <label for="kebsYes">Yes</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="kebsNo" name="kebsPresent" value="no" required>
+                    <label for="kebsNo">No</label>
+                </div>
+            </div>
+        </div>
+        <div class="radio-group">
+            <label>Sticker Condition:</label>
+            <div>
+                <div class="radio-option">
+                    <input type="radio" id="stickerIntact" name="stickerCondition" value="intact" required>
+                    <label for="stickerIntact">Intact</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="stickerTampered" name="stickerCondition" value="tampered" required>
+                    <label for="stickerTampered">Tampered</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Date Verification Section -->
+    <div class="input-group">
+        <label>Manufacturing Date:</label>
+        <input type="date" id="manufactureDate" required>
+        <label>Storage Conditions:</label>
+        <div class="storage-slider-container">
+            <input type="range" id="storageCondition" min="0" max="3" step="1" value="0">
+            <div class="slider-labels">
+                <span>Poor</span>
+                <span>Fair</span>
+                <span>Good</span>
+                <span>Excellent</span>
+            </div>
+            <div id="storageDescription" class="storage-description"></div>
+        </div>
+    </div>
+            <div class="d-grid gap-2 mt-4 button-group">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Verify Cement Product
+                </button>
+                <a href="orders.html" class="btn-order" style="display: none;" id="orderButton">
+                    <span>🛒</span> Order Cement Now
+                </a>
+            </div>
+        </form>
+        <div class="results-display" id="resultsDisplay" aria-live="polite">
+            <h3>Verification Results</h3>
+            <div class="result-item" id="overallScore"></div>
+            <div class="result-item" id="brandResult"></div>
+            <div class="result-item" id="locationResult"></div>
+            <div class="result-item" id="weightResult"></div>
+            <div class="result-item" id="strengthResult"></div>
+            <div class="result-item" id="kebsResult"></div>
+            <div class="result-item" id="dateResult"></div>
+            <div class="result-item" id="recommendation"></div>
+        </div>
+    </main>
+
+<script>
+const brandOptions = {
+    bamburi: ['Nguvu', 'Duracem', 'Powerplus'],
+    mombasa: ['Nyumba', 'Power Plus', 'Mukwano'],
+    eapc: ['Blue Triangle', 'EAPC Plus'],
+    national: ['Simba Cement', 'Nyati'],
+    savannah: ['Savannah Premium', 'Savannah Plus'],
+    rai: ['Rai Cement'],
+    karsan: ['Ndovu Cement']
+};
+
+// Add this function at the start of your script
+function checkAuthStatus() {
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+    
+    console.log('Current token:', token); // Debug log
+    console.log('User role:', userRole); // Debug log
+
+    if (!token || !userRole) {
+        alert('Please log in to access verification features');
+        window.location.href = 'customer-login.html';
+        return false;
+    }
+
+    if (userRole !== 'customer') {
+        alert('This feature is only available for customers');
+        window.location.href = 'customer-login.html';
+        return false;
+    }
+
+    return true;
+}
+
+// Consolidated auth function
+function getCustomerAuth() {
+    const auth = {
+        token: localStorage.getItem('token'), // Standardized to 'token'
+        name: localStorage.getItem('customerName'),
+        id: localStorage.getItem('customerId')
+    };
+    
+    console.log('Current auth state:', auth); // Debug log
+    return auth;
+}
+
+// Consolidated DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', function() {
+    showDebugInfo();
+    const auth = getCustomerAuth();
+    
+    console.log('Token:', auth.token);
+    console.log('Customer Name:', auth.name);
+    
+    if (!auth.token || !auth.name) {
+        const mainContent = document.querySelector('main');
+        mainContent.innerHTML = `
+            <div class="auth-error">
+                <h2>Authentication Required</h2>
+                <p>Please log in to access verification features.</p>
+                <button onclick="window.location.href='customer-login.html'" class="btn">
+                    Go to Login
+                </button>
+            </div>
+        `;
+        return; // Exit if not authenticated
+    }
+
+    // Initialize manufacturer-brand linkage
+    const manufacturerSelect = document.getElementById('manufacturerSelect');
+    const brandSelect = document.getElementById('brandSelect');
+    manufacturerSelect.addEventListener('change', function() {
+        const selectedManufacturer = this.value;
+        brandSelect.innerHTML = '';
+        if (selectedManufacturer) {
+            brandSelect.disabled = false;
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Select brand...';
+            brandSelect.appendChild(defaultOption);
+            const brands = brandOptions[selectedManufacturer] || [];
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand.toLowerCase().replace(/\s+/g, '-');
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
+        } else {
+            brandSelect.disabled = true;
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'First select a manufacturer...';
+            brandSelect.appendChild(defaultOption);
+        }
+    });
+
+    // Highlight current page in menu
+    const currentPage = window.location.pathname.split('/').pop();
+    const menuLinks = document.querySelectorAll('.menu-link');
+    menuLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+
+    // Origin slider initialization
+    var originSlider = document.getElementById('originSlider');
+    var originDescription = document.getElementById('originDescription');
+    if (originSlider && !originSlider.noUiSlider) {
+        noUiSlider.create(originSlider, {
+            start: 0,
+            step: 1,
+            range: { 'min': 0, 'max': 2 },
+            pips: {
+                mode: 'values',
+                values: [0, 1, 2],
+                density: 50,
+                format: {
+                    to: function(value) {
+                        const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+                        return origins[value];
+                    }
+                }
+            }
+        });
+        originSlider.noUiSlider.on('update', function(values, handle) {
+            const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+            originDescription.textContent = origins[Math.round(values[handle])];
+        });
+        var pips = originSlider.querySelectorAll('.noUi-value');
+        function clickOnPip() {
+            var value = Number(this.getAttribute('data-value'));
+            originSlider.noUiSlider.set(value);
+        }
+        for (var i = 0; i < pips.length; i++) {
+            pips[i].style.cursor = 'pointer';
+            pips[i].addEventListener('click', clickOnPip);
+        }
+    }
+});
+
+// Calculate verification scores (kept as is)
+function calculateScores() {
+    let scores = {
+        brand: 0,
+        location: 0,
+        weight: 0,
+        strength: 0,
+        kebs: 0,
+        date: 0
+    };
+
+    // Brand Verification (20 points)
+    if (manufacturerSelect.value && brandSelect.value) {
+        scores.brand = 20;
+    }
+
+    // Location Verification (20 points)
+    scores.location = calculateLocationScore();
+
+    // Weight Verification (15 points)
+    scores.weight = calculateWeightScore();
+
+    // Strength Verification (15 points)
+    scores.strength = calculateStrengthScore();
+
+    // KEBS Verification (20 points)
+    scores.kebs = calculateKebsScore();
+
+    // Date Verification (10 points)
+    scores.date = calculateDateScore();
+
+    return scores;
+}
+
+function calculateLocationScore() {
+    let score = 0;
+    if (document.getElementById('countySelect').value) score += 5;
+    if (document.getElementById('specificLocation').value) score += 5;
+    if (document.getElementById('factory').checked) score += 10; // Adjusted IDs to match radio buttons
+    else if (document.getElementById('dealer').checked) score += 7;
+    else if (document.getElementById('retailer').checked) score += 5;
+    return score;
+}
+
+function calculateWeightScore() {
+    let score = 0;
+    const weight = parseFloat(document.getElementById('actualWeight').value);
+    if (weight >= 49.5 && weight <= 50.5) score += 15;
+    else if (weight >= 49 && weight <= 51) score += 10;
+    else score += 5;
+    return score;
+}
+
+function calculateStrengthScore() {
+    let score = 0;
+    const strengthClass = document.getElementById('strengthClass').value;
+    const intendedUse = document.getElementById('intendedUse').value;
+    if (strengthClass && intendedUse) {
+        score += 7;
+        if ((strengthClass === '32.5' && intendedUse === 'residential') ||
+            (strengthClass === '42.5' && intendedUse === 'commercial') ||
+            (strengthClass === '52.5' && intendedUse === 'infrastructure')) {
+            score += 8;
+        }
+    }
+    return score;
+}
+
+function calculateKebsScore() {
+    let score = 0;
+    const kebsPresent = document.querySelector('input[name="kebsPresent"]:checked');
+    const stickerCondition = document.querySelector('input[name="stickerCondition"]:checked');
+    if (kebsPresent && kebsPresent.value === 'yes') {
+        score += 10;
+        if (stickerCondition && stickerCondition.value === 'intact') {
+            score += 10;
+        }
+    }
+    return score;
+}
+
+function calculateDateScore() {
+    let score = 0;
+    if (document.getElementById('manufactureDate').value) score += 4;
+    const storageValue = parseInt(document.getElementById('storageCondition').value);
+    score += storageValue * 2;
+    return score;
+}
+
+// Consolidated form submission handler
+document.getElementById('verificationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const auth = getCustomerAuth();
+    if (!auth.token) {
+        alert('Session expired. Please login again.');
+        window.location.href = 'customer-login.html';
+        return;
+    }
+
+    const formData = {
+        manufacturer: document.getElementById('manufacturerSelect').value,
+        brand: document.getElementById('brandSelect').value,
+        county: document.getElementById('countySelect').value,
+        location: document.getElementById('specificLocation').value,
+        origin: document.querySelector('input[name="origin"]:checked')?.value,
+        declaredWeight: document.getElementById('declaredWeight').value,
+        actualWeight: document.getElementById('actualWeight').value,
+        strengthClass: document.getElementById('strengthClass').value,
+        intendedUse: document.getElementById('intendedUse').value,
+        kebsPresent: document.querySelector('input[name="kebsPresent"]:checked')?.value,
+        stickerCondition: document.querySelector('input[name="stickerCondition"]:checked')?.value,
+        manufactureDate: document.getElementById('manufactureDate').value,
+        storageCondition: document.getElementById('storageCondition').value
+    };
+
+    try {
+        console.log('Sending token:', auth.token); // Debug log
+        const response = await fetch('http://localhost:5000/api/verifications', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${auth.token}`
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (response.status === 401) {
+            console.log('Server rejected token'); // Debug log
+            alert('Session expired or invalid token. Please log in again.');
+            window.location.href = 'customer-login.html';
+            return;
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Verification failed');
+        }
+
+        const result = await response.json();
+        console.log('Server response:', result);  // Debug log
+
+        const scores = calculateScores();
+        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+        const resultsDisplay = document.getElementById('resultsDisplay');
+        resultsDisplay.classList.add('show');
+
+        document.getElementById('overallScore').innerHTML = `Overall Score: ${totalScore}%`;
+        document.getElementById('brandResult').innerHTML = `Brand Verification: ${scores.brand}/20`;
+        document.getElementById('locationResult').innerHTML = `Location Verification: ${scores.location}/20`;
+        document.getElementById('weightResult').innerHTML = `Weight Verification: ${scores.weight}/15`;
+        document.getElementById('strengthResult').innerHTML = `Strength Verification: ${scores.strength}/15`;
+        document.getElementById('kebsResult').innerHTML = `KEBS Verification: ${scores.kebs}/20`;
+        document.getElementById('dateResult').innerHTML = `Date Verification: ${scores.date}/10`;
+        document.getElementById('recommendation').innerHTML = getRecommendation(totalScore);
+
+        if (totalScore >= 70) {
+            const orderButton = document.getElementById('orderButton');
+            orderButton.style.display = 'flex';
+            orderButton.addEventListener('click', () => {
+                window.location.href = 'orders.html';
+            });
+        }
+    } catch (error) {
+        console.error('Verification error:', error);
+        alert(error.message || 'Verification failed. Please try again.');
+    }
+});
+
+function showDebugInfo() {
+    const debugDiv = document.getElementById('authDebug');
+    if (debugDiv) {
+        const debug = {
+            token: localStorage.getItem('token'),
+            userId: localStorage.getItem('userId'),
+            userRole: localStorage.getItem('userRole')
+        };
+        debugDiv.textContent = JSON.stringify(debug, null, 2);
+        document.getElementById('debugInfo').style.display = 'block';
+    }
+}
+
+// Kept for debugging purposes
+Object.keys(localStorage).forEach(key => {
+    console.log(`${key}: ${localStorage.getItem(key)}`);
+});
+</script>
+
+<script>
+    // Highlight current page in menu (kept as is)
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPage = window.location.pathname.split('/').pop();
+        const menuLinks = document.querySelectorAll('.menu-link');
+        
+        menuLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    });
+</script>
+
+<script>
+    // Origin slider initialization (kept as is)
+    document.addEventListener('DOMContentLoaded', function() {
+        var originSlider = document.getElementById('originSlider');
+        var originDescription = document.getElementById('originDescription');
+
+        if (originSlider && !originSlider.noUiSlider) {
+            noUiSlider.create(originSlider, {
+                start: 0,
+                step: 1,
+                range: {
+                    'min': 0,
+                    'max': 2
+                },
+                pips: {
+                    mode: 'values',
+                    values: [0, 1, 2],
+                    density: 50,
+                    format: {
+                        to: function(value) {
+                            const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+                            return origins[value];
+                        }
+                    }
+                }
+            });
+
+            originSlider.noUiSlider.on('update', function(values, handle) {
+                const origins = ['From Factory', 'From Authorized Dealer', 'From Retailer'];
+                originDescription.textContent = origins[Math.round(values[handle])];
+            });
+
+            var pips = originSlider.querySelectorAll('.noUi-value');
+            function clickOnPip() {
+                var value = Number(this.getAttribute('data-value'));
+                originSlider.noUiSlider.set(value);
+            }
+
+            for (var i = 0; i < pips.length; i++) {
+                pips[i].style.cursor = 'pointer';
+                pips[i].addEventListener('click', clickOnPip);
+            }
+        }
+    });
+</script>
+
+<script>
+    // Form validation (kept as is)
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })();
+</script>
+
+<script>
+// Second form submission handler (merged into the main one, kept here for reference)
+const verificationForm = document.getElementById('verificationForm');
+const orderButton = document.getElementById('orderButton');
+const resultsDisplay = document.getElementById('resultsDisplay');
+
+verificationForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const auth = getCustomerAuth();
+    if (!auth.token) {
+        alert('Session expired. Please login again.');
+        window.location.href = 'customer-login.html';
+        return;
+    }
+
+    const formData = {
+        manufacturer: document.getElementById('manufacturerSelect').value,
+        brand: document.getElementById('brandSelect').value,
+        county: document.getElementById('countySelect').value,
+        location: document.getElementById('specificLocation').value,
+        origin: document.querySelector('input[name="origin"]:checked')?.value,
+        declaredWeight: document.getElementById('declaredWeight').value,
+        actualWeight: document.getElementById('actualWeight').value,
+        strengthClass: document.getElementById('strengthClass').value,
+        intendedUse: document.getElementById('intendedUse').value,
+        kebsPresent: document.querySelector('input[name="kebsPresent"]:checked')?.value,
+        stickerCondition: document.querySelector('input[name="stickerCondition"]:checked')?.value,
+        manufactureDate: document.getElementById('manufactureDate').value,
+        storageCondition: document.getElementById('storageCondition').value
+    };
+
+    try {
+        const response = await fetch('/api/verifications', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Verification failed');
+        }
+
+        const result = await response.json();
+        resultsDisplay.classList.add('show');
+        
+        const scores = calculateScores();
+        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+
+        document.getElementById('overallScore').innerHTML = `Overall Score: ${totalScore}%`;
+        document.getElementById('brandResult').innerHTML = `Brand Verification: ${scores.brand}/20`;
+        document.getElementById('locationResult').innerHTML = `Location Verification: ${scores.location}/20`;
+        document.getElementById('weightResult').innerHTML = `Weight Verification: ${scores.weight}/15`;
+        document.getElementById('strengthResult').innerHTML = `Strength Verification: ${scores.strength}/15`;
+        document.getElementById('kebsResult').innerHTML = `KEBS Verification: ${scores.kebs}/20`;
+        document.getElementById('dateResult').innerHTML = `Date Verification: ${scores.date}/10`;
+        document.getElementById('recommendation').innerHTML = getRecommendation(totalScore);
+
+        if (totalScore >= 70) {
+            orderButton.style.display = 'flex';
+            orderButton.addEventListener('click', () => {
+                window.location.href = 'orders.html';
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Verification failed. Please try again.');
+    }
+});
+
+// Added recommendation function (was missing in original)
+function getRecommendation(totalScore) {
+    if (totalScore >= 80) return 'Recommended: High quality product';
+    if (totalScore >= 70) return 'Acceptable: Good quality product';
+    return 'Not Recommended: Verify authenticity';
+}
+</script>
+</body>
+</html>

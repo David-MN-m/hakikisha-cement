@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hakikisha Verifier - Place Order">
+    <title>Hakikisha - Place Order</title>
+    <link rel="stylesheet" href="/styles/animations.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1d4ed8;
+            --accent-color: #00a3ff;
+            --background-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --success-color: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--background-light) 0%, #ffffff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .order-container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+        }
+
+        .order-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .order-header img.logo {
+            width: 150px;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-header h1 {
+            color: var(--text-dark);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .order-form {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--background-light);
+            color: var(--text-dark);
+            appearance: none;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .price-display {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .submit-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1.2rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .success-animation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .order-container {
+                padding: 1.5rem;
+                margin: 1rem;
+                width: auto;
+            }
+
+            .order-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: white;
+            z-index: 1000;
+        }
+
+        .notification.success {
+            background-color: #28a745;
+        }
+
+        .notification.error {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="order-container">
+        <div class="order-header">
+            <img src="images/hakikisha-verifier-logo.png" alt="Hakikisha Logo" class="logo">
+            <h1>Place Your Order</h1>
+            <p>Fill in the details below to place your order</p>
+        </div>
+
+        <div class="vendor-details" id="vendorInfo">
+            <!-- Vendor details will be populated by JavaScript -->
+        </div>
+
+        <form id="orderForm" class="order-form" onsubmit="handleOrder(event)">
+            <div class="form-group">
+                <label for="vendorSelect">Select Vendor</label>
+                <select id="vendorSelect" required onchange="loadVendorProducts(this.value)">
+                    <option value="">Select a vendor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cementBrand">Select Cement Brand</label>
+                <select id="cementBrand" required onchange="updateTypes()">
+                    <option value="">Select a brand</option>
+                    <option value="Bamburi">Bamburi</option>
+                    <option value="Simba">Simba</option>
+                    <option value="Savannah">Savannah</option>
+                    <option value="Mombasa">Mombasa</option>
+                    <option value="National">National</option>
+                    <option value="EastAfrican">EastAfrican</option>
+                    <option value="Karimi">Karimi</option>
+                    <option value="Athi">Athi</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cementType">Select Cement Type</label>
+                <select id="cementType" required>
+                    <option value="">Select brand first</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity (Bags)</label>
+                <input type="number" id="quantity" min="1" required onchange="updatePrice()">
+            </div>
+
+            <div class="price-display" id="priceDisplay">
+                Total: KES 0
+            </div>
+
+            <button type="submit" class="submit-btn">Place Order</button>
+        </form>
+    </div>
+
+    <script>
+        // Mock cement types and prices
+        const cementProducts = {
+            bamburi: {
+                types: [
+                    { name: 'Power Plus (32.5R)', price: 700 },
+                    { name: 'Power Max (42.5R)', price: 750 },
+                    { name: 'Power Crete (52.5R)', price: 800 }
+                ]
+            },
+            simba: {
+                types: [
+                    { name: 'Standard Cement (32.5N)', price: 680 },
+                    { name: 'Premium Cement (42.5N)', price: 730 }
+                ]
+            },
+            savannah: {
+                types: [
+                    { name: 'Multi-Purpose (32.5R)', price: 690 },
+                    { name: 'Premium Plus (42.5N)', price: 740 }
+                ]
+            },
+            mombasa: {
+                types: [
+                    { name: 'Nyumba (32.5N)', price: 670 },
+                    { name: 'Nguvu (42.5N)', price: 720 }
+                ]
+            },
+            national: {
+                types: [
+                    { name: 'Standard (32.5R)', price: 675 },
+                    { name: 'Premium (42.5N)', price: 725 }
+                ]
+            },
+            'east-african': {
+                types: [
+                    { name: 'Blue Triangle (32.5R)', price: 680 },
+                    { name: 'Premium (42.5N)', price: 730 }
+                ]
+            }
+        };
+
+        // Check authentication on load
+        document.addEventListener('DOMContentLoaded', async () => {
+            const auth = getCustomerAuth();
+            if (!auth.token) {
+                alert('Please log in to place an order.');
+                window.location.href = 'customer-login.html';
+                return;
+            }
+
+            await loadVendors();
+            await fetchVendors(); // Ensure vendors are fetched
+            updatePrice();
+        });
+
+        // Authentication check function
+        function getCustomerAuth() {
+            const auth = {
+                token: localStorage.getItem('token'),
+                name: localStorage.getItem('customerName'),
+                id: localStorage.getItem('customerId')
+            };
+            console.log('Current auth state:', auth);
+            return auth;
+        }
+
+        // Fetch vendors from backend
+        async function fetchVendors() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('Authentication required');
+                }
+
+                console.log('Fetching vendors...');
+                const response = await fetch('http://localhost:5000/api/users/vendors/list', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to fetch vendors');
+                }
+
+                const vendors = await response.json();
+                console.log('Vendors fetched:', vendors);
+
+                const vendorSelect = document.getElementById('vendorSelect');
+                if (!vendorSelect) {
+                    console.error('Vendor select element not found');
+                    return;
+                }
+
+                vendorSelect.innerHTML = `
+                    <option value="">Select a Vendor</option>
+                    ${vendors.map(vendor => `
+                        <option value="${vendor.id}">
+                            ${vendor.businessName} - ${vendor.address}
+                        </option>
+                    `).join('')}
+                `;
+            } catch (error) {
+                console.error('Error fetching vendors:', error);
+                showNotification('Failed to load vendors: ' + error.message, 'error');
+            }
+        }
+
+        // Fetch vendor products
+        async function loadVendorProducts(vendorId) {
+            if (!vendorId) {
+                document.getElementById('cementBrand').innerHTML = '<option value="">Select a brand</option>';
+                return;
+            }
+        
+            try {
+                const auth = getCustomerAuth();
+                console.log('Fetching products for vendor:', vendorId); // Debug log
+        
+                const response = await fetch(`http://localhost:5000/api/products/vendor/${vendorId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${auth.token}`
+                    }
+                });
+        
+                const products = await response.json();
+                console.log('Products received from server:', products); // Debug log
+        
+                // Group products by brand
+                const brandGroups = products.reduce((groups, product) => {
+                    if (!groups[product.brand]) {
+                        groups[product.brand] = [];
+                    }
+                    groups[product.brand].push(product);
+                    return groups;
+                }, {});
+        
+                console.log('Grouped products:', brandGroups); // Debug log
+        
+                const brandSelect = document.getElementById('cementBrand');
+                brandSelect.innerHTML = '<option value="">Select a brand</option>' + 
+                    Object.entries(brandGroups).map(([brand, brandProducts]) => `
+                        <option value="${brand}" data-products='${JSON.stringify(brandProducts)}'>
+                            ${brand}
+                        </option>
+                    `).join('');
+        
+                updateTypes();
+            } catch (error) {
+                console.error('Error loading vendor products:', error);
+                showNotification('Unable to load products: ' + error.message, 'error');
+            }
+        }
+
+        // Update these two functions in your existing file
+        function updateTypes() {
+            const brandSelect = document.getElementById('cementBrand');
+            const typeSelect = document.getElementById('cementType');
+            
+            typeSelect.innerHTML = '<option value="">Select a type</option>';
+
+            if (!brandSelect.value) return;
+
+            try {
+                const selectedOption = brandSelect.options[brandSelect.selectedIndex];
+                const products = JSON.parse(selectedOption.dataset.products || '[]');
+                console.log('Products available:', products);
+
+                products.forEach(product => {
+                    if (!product._id) {
+                        console.warn('Product missing _id:', product);
+                        return;
+                    }
+
+                    const option = document.createElement('option');
+                    option.value = JSON.stringify(product);
+                    option.textContent = `${product.type} (${product.strengthClass}) - KES ${product.price}/bag`;
+                    typeSelect.appendChild(option);
+                });
+
+                updatePrice();
+            } catch (error) {
+                console.error('Error in updateTypes:', error);
+                console.log('Selected brand data:', brandSelect.value);
+                showNotification('Error loading cement types', 'error');
+            }
+        }
+
+        // Update the updatePrice function
+        function updatePrice() {
+            const typeSelect = document.getElementById('cementType');
+            const quantityInput = document.getElementById('quantity');
+            const priceDisplay = document.getElementById('priceDisplay');
+
+            try {
+                if (!typeSelect.value || !quantityInput.value) {
+                    priceDisplay.textContent = 'KES 0';
+                    return;
+                }
+
+                const selectedProduct = JSON.parse(typeSelect.value);
+                const price = parseFloat(selectedProduct.price);
+                const quantity = parseInt(quantityInput.value);
+                const total = price * quantity;
+
+                console.log('Price calculation:', {
+                    price,
+                    quantity,
+                    total,
+                    selectedProduct
+                });
+
+                priceDisplay.textContent = `KES ${total.toLocaleString()}`;
+            } catch (error) {
+                console.error('Error calculating price:', error);
+                priceDisplay.textContent = 'KES 0';
+            }
+        }
+
+        // Update the order submission
+        async function handleOrder(event) {
+            event.preventDefault();
+            
+            try {
+                const auth = getCustomerAuth();
+                if (!auth.token || !auth.id) {
+                    showNotification('Please log in to place an order', 'error');
+                    return;
+                }
+
+                const vendorId = document.getElementById('vendorSelect').value;
+                const typeSelect = document.getElementById('cementType');
+                const quantity = parseInt(document.getElementById('quantity').value);
+
+                if (!typeSelect.value || !quantity) {
+                    showNotification('Please select a cement type and enter quantity', 'error');
+                    return;
+                }
+
+                // Parse the selected product data
+                const selectedProduct = JSON.parse(typeSelect.value);
+                console.log('Selected product for order:', selectedProduct);
+
+                if (!selectedProduct._id) {
+                    showNotification('Invalid product selection', 'error');
+                    return;
+                }
+
+                // Calculate total amount
+                const totalAmount = selectedProduct.price * quantity;
+
+                const orderData = {
+                    customerId: auth.id,
+                    vendorId: vendorId,
+                    items: [{
+                        productId: selectedProduct._id,
+                        quantity: quantity
+                    }],
+                    totalAmount: totalAmount
+                };
+
+                console.log('Sending order data:', orderData);
+
+                const response = await fetch('http://localhost:5000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${auth.token}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.message || 'Failed to place order');
+                }
+
+                console.log('Order created:', result);
+                showNotification('Order placed successfully!', 'success');
+                localStorage.setItem('lastAction', 'order_placed');
+                window.location.href = 'customer-dashboard.html';
+
+            } catch (error) {
+                console.error('Error placing order:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        // Initialize price display
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePrice();
+        });
+
+        function loadVendors() {
+            const vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+            const vendorSelect = document.getElementById('vendorSelect');
+            vendorSelect.innerHTML = vendors.map(vendor => `
+                <option value="${vendor.id}">${vendor.businessName}</option>
+            `).join('');
+        }
+
+        // Add this function in your <script> section
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

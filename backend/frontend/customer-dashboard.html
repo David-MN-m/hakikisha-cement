@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakikisha - Customer Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1d4ed8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background-color: #f1f5f9;
+            --text-color: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--background-color);
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: white;
+            padding: 2rem;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .customer-info {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .customer-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logout-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Recent Verifications */
+        .recent-verifications {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Orders History */
+        .orders-history {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-verified {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        /* Tab Content Styles */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Verify Options */
+        .verify-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .verify-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .verify-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .verify-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Orders Grid */
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* History List */
+        .history-list {
+            margin-top: 1.5rem;
+        }
+
+        .history-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Profile Form */
+        .profile-form {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .dashboard-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-confirmed { background: #dbeafe; color: #1e40af; }
+        .status-delivered { background: #dcfce7; color: #166534; }
+        .status-cancelled { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="customer-info">
+                <div class="customer-avatar" id="customerInitials">C</div>
+                <h2 id="customerName">Loading...</h2>
+                <p id="customerEmail">Loading...</p>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" onclick="showTab('dashboard')">
+                        🏠 Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="Verify.html" class="nav-link">
+                        ✓ Verify Product
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="orders.html" class="nav-link">
+                        🛍️ Place Order
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showTab('history')">
+                        📋 Verification History
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showTab('profile')">
+                        👤 Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/customer-dashboard" class="dashboard-button">Customer Dashboard</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Customer Dashboard</h1>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="action-card" onclick="window.location.href='Verify.html'">
+                    <div class="action-icon">✓</div>
+                    <h3>Verify Product</h3>
+                    <p>Check cement product authenticity</p>
+                </div>
+                <div class="action-card" onclick="window.location.href='orders.html'">
+                    <div class="action-icon">🛒</div>
+                    <h3>Place Order</h3>
+                    <p>Order cement products</p>
+                </div>
+                <div class="action-card" onclick="showTab('history')">
+                    <div class="action-icon">📋</div>
+                    <h3>View History</h3>
+                    <p>Check your verification history</p>
+                </div>
+            </div>
+
+            <!-- Recent Verifications -->
+            <div class="recent-verifications">
+                <h2>Recent Verifications</h2>
+                <table style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Product</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="verificationsTableBody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Orders History -->
+            <div class="orders-history">
+                <h2>Recent Orders</h2>
+                <table style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div id="dashboardContent" class="tab-content active">
+                <!-- Current dashboard content stays here -->
+            </div>
+
+            <!-- Verify Product Content -->
+            <div id="verifyContent" class="tab-content">
+                <div class="verify-container">
+                    <h2>Verify Product</h2>
+                    <div class="verify-options">
+                        <div class="verify-card" onclick="window.location.href='Verify.html'">
+                            <div class="verify-icon">📷</div>
+                            <h3>Scan QR Code</h3>
+                            <p>Use your camera to scan product QR code</p>
+                        </div>
+                        <div class="verify-card" onclick="showManualVerifyForm()">
+                            <div class="verify-icon">📝</div>
+                            <h3>Manual Entry</h3>
+                            <p>Enter product code manually</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Content -->
+            <div id="ordersContent" class="tab-content">
+                <div class="orders-container">
+                    <div class="orders-header">
+                        <h2>My Orders</h2>
+                        <button class="new-order-btn" onclick="window.location.href='orders.html'">Place New Order</button>
+                    </div>
+                    <div class="orders-filter">
+                        <select onchange="filterOrders(this.value)">
+                            <option value="all">All Orders</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="delivered">Delivered</option>
+                        </select>
+                    </div>
+                    <div class="orders-grid" id="ordersGrid">
+                        <!-- Orders will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification History Content -->
+            <div id="historyContent" class="tab-content">
+                <div class="history-container">
+                    <h2>Verification History</h2>
+                    <div class="history-filters">
+                        <input type="date" id="historyDateFilter" onchange="filterHistory()">
+                        <select id="historyStatusFilter" onchange="filterHistory()">
+                            <option value="all">All Status</option>
+                            <option value="verified">Verified</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <!-- Verification history will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Content -->
+            <div id="profileContent" class="tab-content">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <h2>My Profile</h2>
+                        <j button class="edit-profile-btn" onclick="toggleEditMode()">Edit Profile</button>
+                    </div>
+                    <form id="profileForm" class="profile-form" onsubmit="updateProfile(event)">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="fullName" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phone" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Delivery Address</label>
+                            <textarea id="address" disabled></textarea>
+                        </div>
+                        <button type="submit" class="save-profile-btn" style="display: none;">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <h2>My Orders</h2>
+                <div class="orders-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Vendor</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr><td colspan="5">Loading orders...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <h2>My Verifications</h2>
+                <div class="verifications-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Brand</th>
+                                <th>Manufacturer</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="verificationsTableBody">
+                            <tr><td colspan="4">Loading verifications...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    async function loadDashboardData() {
+        const auth = JSON.parse(localStorage.getItem('customerAuth') || '{}');
+        
+        if (!auth.token || !auth.userId) {
+            window.location.href = 'customer-login.html';
+            return;
+        }
+
+        try {
+            const [ordersRes, verificationsRes] = await Promise.all([
+                fetch(`http://localhost:5000/api/orders/customer/${auth.userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${auth.token}`
+                    }
+                }),
+                fetch(`http://localhost:5000/api/verifications/customer/${auth.userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${auth.token}`
+                    }
+                })
+            ]);
+
+            if (ordersRes.ok) {
+                const orders = await ordersRes.json();
+                console.log('Orders loaded:', orders);
+                displayOrders(orders);
+            }
+
+            if (verificationsRes.ok) {
+                const verifications = await verificationsRes.json();
+                console.log('Verifications loaded:', verifications);
+                displayVerifications(verifications);
+            }
+
+        } catch (error) {
+            console.error('Error loading dashboard data:', error);
+        }
+    }
+
+    // Load dashboard data immediately and stay on page
+    window.addEventListener('load', () => {
+        loadDashboardData();
+    });
+</script>
+</body>
+</html>

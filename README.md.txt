@@ -36,7 +36,7 @@ Landing/
 - JavaScript (ES6+)
 - Bootstrap 5.3.0
 - Local Storage for data persistence
-
+-mongo db
 ## Getting Started
 
 1. Clone the repository

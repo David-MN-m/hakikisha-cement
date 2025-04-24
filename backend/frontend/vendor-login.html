@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakikisha - Vendor Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1d4ed8;
+            --background-color: #f0f9ff;
+            --text-color: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--background-color) 0%, #ffffff 100%);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            width: 140px;
+            display: block;
+            margin: 0 auto 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .login-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            display: none;
+            color: #dc3545;
+            margin-top: 10px;
+            text-align: center;
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: rgba(220, 38, 38, 0.1);
+            font-weight: 500;
+        }
+
+        .business-type {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="images/hakikisha-verifier-logo.png" alt="Hakikisha Logo" class="logo">
+        <h1>Vendor Login</h1>
+        
+        <form id="loginForm" class="login-form">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required placeholder="Enter your email">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+                <i class="password-toggle fas fa-eye" onclick="togglePassword()"></i>
+            </div>
+
+            <button type="submit" class="login-btn">Login</button>
+            
+            <div class="links">
+                <a href="vendor-signup.html">New Vendor? Register here</a>
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                try {
+                    const response = await fetch('http://localhost:5000/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email,
+                            password,
+                            role: 'vendor'
+                        })
+                    });
+
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (jsonError) {
+                        console.error('JSON parsing error:', jsonError);
+                        const rawText = await response.text();
+                        console.log('Raw response:', rawText);
+                        throw new Error('Invalid server response');
+                    }
+                    console.log('Full login response:', { status: response.status, body: data });
+
+                    if (response.ok && data.token) {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('vendorName');
+                        localStorage.removeItem('vendorId');
+
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('userRole', 'vendor');
+                        localStorage.setItem('vendorName', data.user.businessName || data.user.name || 'Vendor');
+                        localStorage.setItem('vendorId', data.user.id || data.user._id);
+
+                        console.log('Stored auth data:', {
+                            token: localStorage.getItem('token'),
+                            userRole: localStorage.getItem('userRole'),
+                            vendorName: localStorage.getItem('vendorName'),
+                            vendorId: localStorage.getItem('vendorId')
+                        });
+
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+
+                        const storedToken = localStorage.getItem('token');
+                        const storedRole = localStorage.getItem('userRole');
+                        const storedId = localStorage.getItem('vendorId');
+                        
+                        if (storedToken && storedRole === 'vendor' && storedId) {
+                            console.log('Redirecting to dashboard...');
+                            window.location.href = 'vendor-dashboard.html';
+                        } else {
+                            throw new Error('Failed to store authentication data');
+                        }
+                    } else {
+                        throw new Error(data.message || 'Login failed');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    errorMessage.textContent = error.message || 'Login failed. Please try again.';
+                    errorMessage.style.display = 'block';
+                    setTimeout(() => errorMessage.style.display = 'none', 3000);
+                }
+            });
+        });
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.querySelector('.password-toggle');
+            
+            if (!passwordInput || !icon) return;
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>

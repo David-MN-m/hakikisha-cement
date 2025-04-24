@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hakikisha Verifier - Document Verification Page">
+    <title>Hakikisha Verifier - Verification</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --primary-color: #0070f3;
+            --primary-hover: #005bb5;
+            --background-light: #f9f9f9;
+            --text-dark: #333;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            --nav-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Styles */
+        .nav-container {
+            background: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            height: var(--nav-height);
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--background-light);
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content Styles */
+        main {
+            margin-top: var(--nav-height);
+            padding: 2rem;
+            flex-grow: 1;
+        }
+
+        .page-title {
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--text-dark);
+        }
+
+        .verification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .verification-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            aspect-ratio: 4/3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .verification-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .verification-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        .verification-item p {
+            color: var(--text-dark);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .verification-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+
+        }
+        .verification-item h3 {
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        /* Mobile Navigation */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: var(--nav-height);
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                box-shadow: var(--shadow);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .verification-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+                padding: 1rem;
+            }
+        }
+
+        /* Glass morphism effect for cards */
+        .verification-item {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Enhanced card animations */
+        .verification-item {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .verification-item:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        /* Improved image container */
+        .verification-item .image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .verification-item .image-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 112, 243, 0.1),
+                rgba(0, 112, 243, 0)
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .verification-item:hover .image-container::before {
+            opacity: 1;
+        }
+
+        /* Enhanced typography */
+        .verification-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--primary-color), #0099ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .verification-item p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Card shine effect */
+        .verification-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 100%
+            );
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .verification-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* Grid layout enhancement */
+        .verification-grid {
+            perspective: 1000px;
+        }
+
+        .verification-item {
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        /* Page title enhancement */
+        .page-title {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent,
+                var(--primary-color),
+                transparent
+            );
+        }
+
+        /* Loading animation for images */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .verification-item img {
+            position: relative;
+        }
+
+        .verification-item img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                #f0f0f0 25%,
+                #f8f8f8 50%,
+                #f0f0f0 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        /* Responsive enhancements */
+        @media (max-width: 768px) {
+            .verification-grid {
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+
+            .verification-item {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        /* Accessibility improvements */
+        .verification-item:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 3px;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .verification-item {
+                background: rgba(255, 255, 255, 0.98);
+            }
+        }
+
+        /* Rating Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1001;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 15% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .rating-section {
+            margin: 1.5rem 0;
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+            gap: 0.5rem;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #ffd700;
+        }
+
+        .form-group {
+            margin: 1rem 0;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Add to your existing styles */
+        .vendor-ratings {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .comments-section {
+            margin-top: 1rem;
+        }
+
+        .comment {
+            padding: 0.5rem;
+            border-left: 3px solid var(--primary-color);
+            margin: 0.5rem 0;
+            background: white;
+        }
+
+        .comment small {
+            color: #666;
+            display: block;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <nav>
+            <div class="logo">
+                <h1>Hakikisha Verifier</h1>
+                <button class="mobile-menu" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Verify.html" class="active">Verify</a></li>
+                <li><a href="results.html">Results</a></li>
+                <li><a href="vendors.html">Cement Vendors</a></li>
+                <li><a href="orders.html">Order Cement</a></li>
+            </ul>
+        </nav>
+    </div>
+    <main>
+        <h2 class="page-title">Cement Verification Criteria</h2>
+        
+        <div class="verification-grid">
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/brand.jpg" alt="Brand Verification">
+                <h3>Brand Verification</h3>
+                <p>Validate manufacturer: Bamburi, Nyumba, Simba Cement</p>
+            </div>
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/location.jpg" alt="Location Verification">
+                <h3>Location Verification</h3>
+                <p>Track purchase location and distribution path</p>
+            </div>
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/weight.jpg" alt="Weight Verification">
+                <h3>Weight Verification</h3>
+                <p>Standard weight check: 50kg ± tolerance</p>
+            </div>
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/strength.jpg" alt="Strength Classification">
+                <h3>Strength & Purpose</h3>
+                <p>Classes: 32.5, 42.5, 52.5 and intended use</p>
+            </div>
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/kebs.jpg" alt="KEBS Verification">
+                <h3>KEBS Verification</h3>
+                <p>Verify KEBS sticker code and batch number</p>
+            </div>
+            <div class="verification-item" role="button" tabindex="0">
+                <img src="images/date.jpg" alt="Date Verification">
+                <h3>Date Verification</h3>
+                <p>Check manufacture date and 3-month shelf life</p>
+            </div>
+            <div class="verification-item" role="button" tabindex="0" onclick="openRatingModal()">
+                <img src="images/pngtree-three-star-rating-sign-png-image_5943823.png" alt="Rate Vendors">
+                <h3>Rate Vendors</h3>
+                <p>Rate vendor services and provide feedback</p>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+    // Mobile menu toggle
+    function toggleMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.toggle('active');
+    }
+
+    // Rating modal functionality
+    function openRatingModal() {
+        const modal = document.getElementById('ratingModal');
+        if (modal) {
+            modal.style.display = 'block';
+            fetchVendors(); // Fetch vendors when modal opens
+        }
+    }
+
+    function closeRatingModal() {
+        const modal = document.getElementById('ratingModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Initialize modal events when document loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('ratingModal');
+        const closeBtn = document.querySelector('.modal .close');
+
+        // Close button click event
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                closeRatingModal();
+            }
+        }
+
+        // Click outside modal to close
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeRatingModal();
+            }
+        }
+
+        // Handle verification items
+        document.querySelectorAll('.verification-item').forEach(item => {
+            item.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    handleVerification(item);
+                }
+            });
+            
+            item.addEventListener('click', () => {
+                // Don't trigger handleVerification for the rating item
+                if (!item.querySelector('h3').textContent.includes('Rate Vendors')) {
+                    handleVerification(item);
+                }
+            });
+        });
+    });
+
+    // ... rest of your existing functions (handleVerification, fetchVendors, etc.) ...
+
+// Add this after your existing functions
+async function fetchVendors() {
+    try {
+        const response = await fetch('http://localhost:5000/api/vendors');
+        if (!response.ok) {
+            throw new Error('Failed to fetch vendors');
+        }
+        
+        const vendors = await response.json();
+        console.log('Fetched vendors:', vendors); // Add this debug line
+        
+        const vendorSelect = document.getElementById('vendorSelect');
+        
+        // Clear existing options except the first default option
+        vendorSelect.innerHTML = '<option value="">Select Vendor</option>';
+        
+        // Add vendors to select dropdown
+        vendors.forEach(vendor => {
+            const option = document.createElement('option');
+            option.value = vendor._id;
+            option.textContent = vendor.businessName || vendor.name;
+            vendorSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching vendors:', error);
+        alert('Failed to load vendors. Please try again.');
+    }
+}
+
+// Update the openRatingModal function
+function openRatingModal() {
+    const modal = document.getElementById('ratingModal');
+    if (modal) {
+        modal.style.display = 'block';
+        fetchVendors(); // This will populate the vendors dropdown
+    }
+}
+
+// Add form submission handler
+document.getElementById('vendorRatingForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const vendorId = document.getElementById('vendorSelect').value;
+    if (!vendorId) {
+        alert('Please select a vendor');
+        return;
+    }
+
+    const formData = {
+        vendorId: vendorId,
+        productQuality: document.querySelector('input[name="product_quality"]:checked')?.value,
+        deliveryService: document.querySelector('input[name="delivery"]:checked')?.value,
+        timeEfficiency: document.querySelector('input[name="time_efficiency"]:checked')?.value,
+        comment: document.getElementById('comment').value,
+        createdAt: new Date().toISOString()
+    };
+
+    // Validate all required fields are filled
+    if (!formData.productQuality || !formData.deliveryService || !formData.timeEfficiency) {
+        alert('Please rate all categories');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/ratings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add authorization if required
+                // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error || 'Failed to submit rating');
+        }
+
+        const result = await response.json();
+        console.log('Rating submitted:', result);
+        alert('Rating submitted successfully!');
+        closeRatingModal();
+        this.reset();
+        
+        // Refresh the ratings display
+        if (vendorId) {
+            displayVendorRatings(vendorId);
+        }
+    } catch (error) {
+        console.error('Error submitting rating:', error);
+        alert('Failed to submit rating: ' + error.message);
+    }
+});
+
+// Add function to fetch and display ratings
+async function displayVendorRatings(vendorId) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/ratings/vendor/${vendorId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch ratings');
+        }
+        
+        const ratings = await response.json();
+        
+        // Calculate average ratings
+        const avgRatings = ratings.reduce((acc, rating) => {
+            acc.productQuality += parseInt(rating.productQuality);
+            acc.deliveryService += parseInt(rating.deliveryService);
+            acc.timeEfficiency += parseInt(rating.timeEfficiency);
+            return acc;
+        }, { productQuality: 0, deliveryService: 0, timeEfficiency: 0 });
+
+        const count = ratings.length;
+        if (count > 0) {
+            avgRatings.productQuality /= count;
+            avgRatings.deliveryService /= count;
+            avgRatings.timeEfficiency /= count;
+        }
+
+        // Create ratings display HTML
+        const ratingsDisplay = document.createElement('div');
+        ratingsDisplay.className = 'vendor-ratings';
+        ratingsDisplay.innerHTML = `
+            <h3>Current Ratings</h3>
+            <p>Product Quality: ${avgRatings.productQuality.toFixed(1)} ⭐</p>
+            <p>Delivery Service: ${avgRatings.deliveryService.toFixed(1)} ⭐</p>
+            <p>Time Efficiency: ${avgRatings.timeEfficiency.toFixed(1)} ⭐</p>
+            <h4>Recent Comments</h4>
+            <div class="comments-section">
+                ${ratings.slice(0, 3).map(rating => `
+                    <div class="comment">
+                        <p>${rating.comment}</p>
+                        <small>Posted on ${new Date(rating.createdAt).toLocaleDateString()}</small>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        // Find or create a container for the ratings
+        let ratingsContainer = document.querySelector('.ratings-container');
+        if (!ratingsContainer) {
+            ratingsContainer = document.createElement('div');
+            ratingsContainer.className = 'ratings-container';
+            document.getElementById('vendorRatingForm').insertBefore(ratingsContainer, document.querySelector('.rating-section'));
+        }
+        ratingsContainer.innerHTML = '';
+        ratingsContainer.appendChild(ratingsDisplay);
+
+    } catch (error) {
+        console.error('Error fetching ratings:', error);
+    }
+}
+
+// Update vendor select event listener
+document.getElementById('vendorSelect').addEventListener('change', function(e) {
+    const vendorId = e.target.value;
+    if (vendorId) {
+        displayVendorRatings(vendorId);
+    }
+});
+
+// Add this function after your existing event listeners
+function handleVerification(item) {
+    const title = item.querySelector('h3').textContent;
+    let verificationType = '';
+    
+    switch(title) {
+        case 'Brand Verification':
+            verificationType = 'brand';
+            break;
+        case 'Location Verification':
+            verificationType = 'location';
+            break;
+        case 'Weight Verification':
+            verificationType = 'weight';
+            break;
+        case 'Strength & Purpose':
+            verificationType = 'strength';
+            break;
+        case 'KEBS Verification':
+            verificationType = 'kebs';
+            break;
+        case 'Date Verification':
+            verificationType = 'date';
+            break;
+        case 'Rate Vendors':
+            // Keep the rating modal functionality
+            openRatingModal();
+            return;
+        default:
+            return;
+    }
+    
+    // Redirect to results.html with the verification type as a parameter
+    window.location.href = `results.html?type=${verificationType}`;
+}
+
+async function submitVerification(event) {
+    // ...existing code...
+
+    try {
+        // ...existing code...
+
+        if (response.ok) {
+            const result = await response.json();
+            showNotification('Verification submitted successfully!', 'success');
+            
+            // Changed: Redirect to customer dashboard after short delay
+            setTimeout(() => {
+                window.location.href = 'customer-dashboard.html#verifications';
+            }, 1500);
+        } else {
+            // ...existing error handling...
+        }
+    } catch (error) {
+        console.error('Error submitting verification:', error);
+        showNotification(error.message, 'error');
+    }
+}
+</script>
+
+    <div id="ratingModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Rate Vendor</h2>
+            <form id="vendorRatingForm">
+                <select name="vendor" id="vendorSelect" required>
+                    <option value="">Select Vendor</option>
+                </select>
+                
+                <div class="rating-section">
+                    <label>Product Quality</label>
+                    <div class="star-rating" data-rating="product">
+                        <input type="radio" name="product_quality" value="5" id="quality5" required><label for="quality5">★</label>
+                        <input type="radio" name="product_quality" value="4" id="quality4"><label for="quality4">★</label>
+                        <input type="radio" name="product_quality" value="3" id="quality3"><label for="quality3">★</label>
+                        <input type="radio" name="product_quality" value="2" id="quality2"><label for="quality2">★</label>
+                        <input type="radio" name="product_quality" value="1" id="quality1"><label for="quality1">★</label>
+                    </div>
+                </div>
+
+                <div class="rating-section">
+                    <label>Delivery Service</label>
+                    <div class="star-rating" data-rating="delivery">
+                        <input type="radio" name="delivery" value="5" id="delivery5" required><label for="delivery5">★</label>
+                        <input type="radio" name="delivery" value="4" id="delivery4"><label for="delivery4">★</label>
+                        <input type="radio" name="delivery" value="3" id="delivery3"><label for="delivery3">★</label>
+                        <input type="radio" name="delivery" value="2" id="delivery2"><label for="delivery2">★</label>
+                        <input type="radio" name="delivery" value="1" id="delivery1"><label for="delivery1">★</label>
+                    </div>
+                </div>
+
+                <div class="rating-section">
+                    <label>Time Efficiency</label>
+                    <div class="star-rating" data-rating="time">
+                        <input type="radio" name="time_efficiency" value="5" id="time5" required><label for="time5">★</label>
+                        <input type="radio" name="time_efficiency" value="4" id="time4"><label for="time4">★</label>
+                        <input type="radio" name="time_efficiency" value="3" id="time3"><label for="time3">★</label>
+                        <input type="radio" name="time_efficiency" value="2" id="time2"><label for="time2">★</label>
+                        <input type="radio" name="time_efficiency" value="1" id="time1"><label for="time1">★</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="comment">Comments & Suggestions</label>
+                    <textarea id="comment" name="comment" rows="4" placeholder="Share your experience and suggestions"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Rating</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
