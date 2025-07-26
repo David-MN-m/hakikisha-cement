@@ -7,35 +7,46 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-    try {
-        const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hakikisha_cement';
-        console.log('Attempting to connect to MongoDB at:', mongoURI);
-        await mongoose.connect(mongoURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 5000,
-            socketTimeoutMS: 45000,
-        });
-        console.log('✅ MongoDB connected successfully!');
-        console.log('Database Name:', mongoose.connection.db.databaseName);
-        console.log('Connection Host:', mongoose.connection.host);
-    } catch (error) {
-        console.error('❌ MongoDB Connection Error:', { message: error.message, stack: error.stack });
-        process.exit(1);
-    }
+    try {
+        const mongoURI = process.env.MONGODB_URI;
+        if (!mongoURI) {
+            throw new Error("MONGODB_URI not found in .env");
+        }
+
+        console.log('🌍 Connecting to MongoDB Atlas...');
+        await mongoose.connect(mongoURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+        });
+        console.log('✅ MongoDB Atlas connected!');
+        console.log('🗄️  DB Name:', mongoose.connection.db.databaseName);
+        console.log('📡 Host:', mongoose.connection.host);
+    } catch (error) {
+        console.error('❌ MongoDB Connection Failed:', {
+            message: error.message,
+            stack: error.stack,
+        });
+        process.exit(1);
+    }
 };
 
 connectDB();
 
 mongoose.connection.on('disconnected', () => {
-    console.warn('⚠️ MongoDB disconnected. Attempting to reconnect...');
-    connectDB();
+    console.warn('⚠️ MongoDB disconnected. Attempting reconnection...');
+    connectDB();
 });
 
 mongoose.connection.on('error', (err) => {
-    console.error('❌ MongoDB Connection Error:', { message: err.message, stack: err.stack });
+    console.error('❌ MongoDB Error:', {
+        message: err.message,
+        stack: err.stack,
+    });
 });
 
+// Routes
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/products');
@@ -48,115 +59,105 @@ const authMiddleware = require('./middleware/auth');
 const app = express();
 const httpServer = http.createServer(app);
 
+// CORS
 app.use(cors({
-    origin: '*',  // For development - change this to your frontend URL later
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
 }));
 app.use(express.json());
 
-// Serve static files first
+// Static files
 const staticPath = path.join(__dirname, 'frontend');
 app.use(express.static(staticPath));
-console.log("📂 Serving static files from:", staticPath);
+console.log("📁 Serving frontend from:", staticPath);
 
 app.get('/landing.html', (req, res) => {
-    res.sendFile(path.join(staticPath, 'landing.html'));
+    res.sendFile(path.join(staticPath, 'landing.html'));
 });
 
+// Socket.io setup
 const socket = require('./utils/socket');
 const io = socket.setupSocket(httpServer);
 app.set('io', io);
 
-// Log all requests with MongoDB state
+// Logging Middleware
 app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    console.log('MongoDB Connection State:', mongoose.connection.readyState);
-    next();
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    console.log('MongoDB State:', mongoose.connection.readyState);
+    next();
 });
 
-// Public routes
+// Public Routes
 app.use('/api/auth', authRoutes);
-// New public route for vendors
-app.use('/api/vendors', userRoutes); // Mount userRoutes for public access to /vendors
-
-// Register routes
+app.use('/api/vendors', userRoutes); // vendor preview access
 app.use('/api/users', userRoutes);
 
-// Protected routes with auth middleware
+// Protected Routes
 const protectedRoutes = express.Router();
+
 protectedRoutes.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] Entering middleware for ${req.method} ${req.url}`);
-    const originalNext = next;
-    next = function(err) {
-        if (err) {
-            console.error(`[${new Date().toISOString()}] Middleware Error:`, {
-                message: err.message,
-                stack: err.stack
-            });
-            return originalNext(err);
-        }
-        console.log(`[${new Date().toISOString()}] Middleware completed for ${req.method} ${req.url}`);
-        originalNext();
-    };
-    authMiddleware(req, res, next);
+    console.log(`[${new Date().toISOString()}] Middleware Check: ${req.method} ${req.url}`);
+    const originalNext = next;
+    next = function(err) {
+        if (err) {
+            console.error(`[${new Date().toISOString()}] Middleware Error:`, err);
+            return originalNext(err);
+        }
+        originalNext();
+    };
+    authMiddleware(req, res, next);
 });
 
 protectedRoutes.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] Route handler about to be invoked for ${req.method} ${req.url}`);
-    next();
+    console.log(`[${new Date().toISOString()}] Accessing protected route: ${req.method} ${req.url}`);
+    next();
 });
 
 app.use('/api/products', protectedRoutes, productRoutes);
 app.use('/api/orders', protectedRoutes, orderRoutes);
 app.use('/api/ratings', protectedRoutes, ratingRoutes);
-app.use('/api/users', protectedRoutes, userRoutes); // Protected user routes
+app.use('/api/users', protectedRoutes, userRoutes); // re-mounted protected
 app.use('/api/verifications', protectedRoutes, verificationRoutes);
 app.use('/api/admin', protectedRoutes, adminRoutes);
 
+// Test Routes
 app.get('/api/protected-route', protectedRoutes, (req, res) => {
-    res.send('This is a protected route');
+    res.send('🔒 You’ve reached a protected route');
 });
 
 app.get('/api/all-data', async (req, res) => {
-    try {
-        res.json({ message: 'Not implemented yet' });
-    } catch (error) {
-        console.error("❌ Error fetching all data:", error.message);
-        res.status(500).json({ message: '❌ Error fetching all data', error: error.message });
-    }
+    try {
+        res.json({ message: '📊 All data endpoint placeholder' });
+    } catch (error) {
+        console.error("❌ Error fetching data:", error.message);
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.get('/test', (req, res) => { 
-    console.log('🛠️ Test route accessed');
-    res.send('✅ Test route is working');
+app.get('/test', (req, res) => {
+    console.log('🧪 Test route hit');
+    res.send('✅ Test route is operational');
 });
 
 app.get('/', (req, res) => {
-    res.send('🔥 Hakikisha API is running...');
+    res.send('🔥 Hakikisha Verifier API is up and running!');
 });
 
-// Enhanced error handler
+// Error Handler
 app.use((err, req, res, next) => {
-    console.error(`[${new Date().toISOString()}] Server Error:`, {
-        message: err.message,
-        stack: err.stack,
-        method: req.method,
-        url: req.url,
-        body: req.body
-    });
-    res.status(500).json({ success: false, message: 'Internal Server Error', error: err.message });
+    console.error(`[${new Date().toISOString()}] Unhandled Error:`, err);
+    res.status(500).json({ success: false, message: 'Internal Server Error', error: err.message });
 });
 
+// Server Start
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
-    console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
 
+// Graceful Shutdown
 process.on('unhandledRejection', (err) => {
-    console.error('⚠️ Unhandled Promise Rejection:', {
-        message: err.message,
-        stack: err.stack
-    });
-    httpServer.close(() => process.exit(1));
+    console.error('💥 Unhandled Promise Rejection:', err);
+    httpServer.close(() => process.exit(1));
 });
