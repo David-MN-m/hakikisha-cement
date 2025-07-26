@@ -4,17 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const helmet = require('helmet');
-const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const logger = require('../utils/logger'); 
 const auth = require('../middleware/auth');
-
-router.use(cors({
-    origin: 'http://localhost:5500', // Correct frontend port
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
 
 router.use(helmet());
 
